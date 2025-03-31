@@ -1,0 +1,16 @@
+services:
+  pi_frontend:
+    container_name: pi_frontend
+    build:
+      context: .
+      target: ${TARGET:-development} 
+    volumes:
+      - .:/app:cached
+      - /app/node_modules  
+    ports:
+      - "${PORT}:5173"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - NODE_ENV=development
+    env_file:
+      - .env
