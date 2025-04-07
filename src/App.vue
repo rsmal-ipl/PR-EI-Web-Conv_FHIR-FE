@@ -34,7 +34,7 @@ onMounted(() => {
   <div class="min-h-screen flex flex-col">
     <NavbarComponent />
     
-    <main class="flex-1 bg-white dark:bg-gray-700 transition-colors duration-300">
+    <main class="flex-1 bg-white dark:bg-gray-800 transition-colors duration-300">
       <RouterView />
     </main>
     

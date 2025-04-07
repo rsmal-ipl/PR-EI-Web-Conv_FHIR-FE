@@ -2,5 +2,6 @@
 </script>
 
 <template>
-  <h1>Main Content</h1>
+
+    <h1 class="text-3xl font-bold dark:text-white text-center mt-10">Home</h1>
 </template>

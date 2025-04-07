@@ -1,5 +1,10 @@
 <script setup>
 
+import { useAuthStore } from "@/stores/auth";
+import { useRouter } from "vue-router";
+import 'flowbite';
+const router = useRouter()
+
 const middleLinks = [
     { name: "Home", routeName: "home" },
     { name: "About", routeName: "home" },
@@ -7,32 +12,73 @@ const middleLinks = [
     { name: "Settings", routeName: "home" },
 ];
 
+
+const storeAuth = useAuthStore()
+
+
+const logout = () => {
+  storeAuth.logout()
+  router.push({ name: 'home' })
+}
+
 </script>
 
 
 <template>
-  <nav class="bg-gray-100 dark:bg-gray-800 dark:text-white p-4 flex items-center justify-between border-b-2">
-        <div class="flex items-center space-x-2">
+
+    <nav class="bg-gray-100 dark:bg-gray-700 dark:text-white top-0 left-0 right-0 z-50">
+      <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+        <div class="flex items-center space-x-3 rtl:space-x-reverse md:w-48 mb-1">
             <span class="text-2xl">⚙️</span>
-            <span class="text-lg font-semibold"
-                >JSON to FHIR</span
-            >
+            <span class="sm:block text-lg font-semibold name_and_image"
+                >JSON to FHIR</span>
         </div>
-
-        <div class="flex space-x-6">
-            <RouterLink :to="{ name: link.routeName }" 
-                v-for="link in middleLinks"
-
-                class="hover:text-gray-400 duration-300 transition">
-                {{ link.name }}
-            </RouterLink>
-        </div>
-
-        <div class="flex space-x-6">
-            <RouterLink :to="{ name: 'login' }"
+    
+        <div class=" ml-5 flex items-center md:order-2 space-x-3 md:space-x-0 justify-end rtl:space-x-reverse w-fit md:w-40">
+          <div class="flex justify-end">
+            <RouterLink :to="{ name: 'login' }" v-if="!storeAuth.user"
                 class="hover:text-gray-400 duration-300 transition">
                 Login
             </RouterLink>
+        <div v-else class="flex items-center space-x-2">
+            <p>Hello, {{storeAuth.user.name}} |</p>
+            <button 
+                class="hover:text-gray-400 duration-300 transition"
+                @click="logout"
+            >Logout</button>
         </div>
+
+          </div>
+    
+          <button data-collapse-toggle="navbar-user" type="button"
+            class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-800 dark:text-white rounded-lg md:hidden focus:outline-none focus:ring-gray-600">
+            <span class="sr-only">Open main menu</span>
+            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                <path class="stroke-current" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M1 1h15M1 7h15M1 13h15" />
+            </svg>
+            </button>
+        </div>
+    
+        <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-user">
+          <ul class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-transparent rounded-lg bg-transparent md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0">
+            <li>
+              <RouterLink :to="{ name: 'home' }"
+                class="block text-black dark:text-white rounded">Home</RouterLink>
+            </li>
+          </ul>
+        </div>
+    
+      </div>
     </nav>
+    
 </template>
+    
+
+<style scoped>
+    @media (max-width: 330px) {
+    .name_and_image {
+        display: none;
+    }
+    }
+</style>

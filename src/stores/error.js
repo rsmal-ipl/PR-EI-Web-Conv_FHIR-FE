@@ -55,7 +55,7 @@ export const useErrorStore = defineStore('error', () => {
                 toastMessage = 'Data is invalid. Check field error messages!'
                 break
             default:
-                toastMessage = `An error occurred! Message: "${mainMessage}"`
+                toastMessage = `An error occurred!`
         }
         toast({
                 title: titleMessage,
