@@ -6,8 +6,15 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import axios from 'axios'
+import vue3GoogleLogin from 'vue3-google-login'
 
 const app = createApp(App)
+
+const googleCliendId = import.meta.env.VITE_GOOGLE_CLIENT_ID
+
+app.use(vue3GoogleLogin, {
+    clientId: googleCliendId,
+})
 
 const apiDomain = import.meta.env.VITE_API_URL
 

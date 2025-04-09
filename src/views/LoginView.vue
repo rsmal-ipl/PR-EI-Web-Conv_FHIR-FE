@@ -6,7 +6,8 @@ import Button from '@/components/ui/button/Button.vue'
 import { useErrorStore } from '@/stores/error'
 import { useAuthStore } from '@/stores/auth'
 import ErrorMessage from '@/components//common/ErrorMessage.vue'
-
+import { GoogleLogin } from 'vue3-google-login'
+import { toast } from '@/components/ui/toast'
 
 const router = useRouter()
 const storeAuth = useAuthStore()
@@ -28,6 +29,21 @@ const login = () => {
 onMounted(() => {
     storeError.resetMessages()
 })
+
+
+const callback = (response) => {
+    if (response.credential) {
+        console.log(response.credential)
+        storeAuth.loginWithGoogle(response)
+    } else {
+        toast({
+                title: "Google Sign-in error!",
+                description: "There was an issue signing in with Google. Please try again later.",
+                variant: 'destructive'
+        })
+    }
+}
+
 </script>
 
 <template>
@@ -60,6 +76,9 @@ onMounted(() => {
                             class="font-semibold  text-sm text-indigo-600 dark:text-indigo-300 hover:text-indigo-500 "
                             :to="{ name: 'register' }">Forgot your password?</RouterLink>
                     </div>
+                </div>
+                <div class="w-fit mx-auto">
+                    <GoogleLogin :callback="callback"/>
                 </div>
                 <div>
                     <Button type="submit" class="w-full mb-3">Sign In</Button>
