@@ -121,6 +121,33 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
+    const loginWithGoogle = async (googleResponse) => {
+        storeError.resetMessages()
+        try {
+                const response = await axios.post('google-login', {
+                Token: googleResponse.credential
+            })
+
+            token.value = response.data.accessToken
+            refreshToken.value = response.data.refreshToken
+
+            localStorage.setItem('refreshToken', refreshToken.value)
+            localStorage.setItem('token', token.value)
+
+            axios.defaults.headers.common.Authorization = 'Bearer ' + token.value
+            const responseUser = await axios.get('user/me')
+            user.value = responseUser.data.user
+
+            repeatRefreshToken()
+
+            router.push({ name: 'home' })
+        } catch (e) {
+            clearUser()
+            // storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Token Refresh Error!')
+            return false
+        }
+}
+
     let intervalToRefreshToken = null
 
     const resetIntervalToRefreshToken = () => {
@@ -182,6 +209,6 @@ export const useAuthStore = defineStore('auth', () => {
 
     return {
         user, userName, userFirstLastName, userEmail, userType, restoreToken, register,
-        login, logout
+        login, logout, loginWithGoogle
     }
 })
