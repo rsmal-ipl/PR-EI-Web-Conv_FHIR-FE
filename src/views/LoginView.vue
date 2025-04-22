@@ -1,11 +1,11 @@
 <script setup>
-import { useRouter } from 'vue-router'
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { Input } from '@/components/ui/input'
 import Button from '@/components/ui/button/Button.vue'
 import { useErrorStore } from '@/stores/error'
 import { useAuthStore } from '@/stores/auth'
-import ErrorMessage from '@/components//common/ErrorMessage.vue'
+import ErrorMessage from '@/components/common/ErrorMessage.vue'
 import { GoogleLogin } from 'vue3-google-login'
 import { toast } from '@/components/ui/toast'
 
@@ -15,35 +15,52 @@ const storeError = useErrorStore()
 
 const credentials = ref({
     email: '',
-    password: ''
+    password: '',
+    recaptchaResponse: ''
 })
+
+const siteKey = '6LcevBArAAAAALx_2825UtGmnR66lc6n43rC6ctu'
 
 const cancel = () => {
     router.push({ name: 'home' })
 }
 
 const login = () => {
-    storeAuth.login(credentials.value)
+
+    if (!grecaptcha.getResponse()) {
+        toast({
+            title: "reCAPTCHA Error!",
+            description: "Please verify that you are not a robot.",
+            variant: 'destructive'
+        })
+        return
+    }
+    credentials.value.recaptchaResponse = "123"
+    storeAuth.login(credentials.value);
 }
 
 onMounted(() => {
     storeError.resetMessages()
+    if (window.grecaptcha) {
+        grecaptcha.ready(() => {
+            grecaptcha.render('recaptcha-container', {
+                sitekey: siteKey
+            })
+        })
+    }
 })
-
 
 const callback = (response) => {
     if (response.credential) {
-        console.log(response.credential)
         storeAuth.loginWithGoogle(response)
     } else {
         toast({
-                title: "Google Sign-in error!",
-                description: "There was an issue signing in with Google. Please try again later.",
-                variant: 'destructive'
+            title: "Google Sign-in error!",
+            description: "There was an issue signing in with Google. Please try again later.",
+            variant: 'destructive'
         })
     }
 }
-
 </script>
 
 <template>
@@ -64,7 +81,7 @@ const callback = (response) => {
                         <ErrorMessage :errorMessage="storeError.fieldMessage('Email')"></ErrorMessage>
                     </div>
                 </div>
-                <div class="text-gray-900 dark:text-white ">
+                <div class="text-gray-900 dark:text-white">
                     <div class="flex items-center justify-between">
                         <label for="password" class="block text-sm/6 font-medium">Password</label>
                     </div>
@@ -77,10 +94,14 @@ const callback = (response) => {
                             :to="{ name: 'register' }">Forgot your password?</RouterLink>
                     </div>
                 </div>
-                <div class="w-fit mx-auto">
-                    <GoogleLogin :callback="callback"/>
-                </div>
                 <div>
+                    <div class="w-fit mx-auto mt-2">
+                        <div id="recaptcha-container" class="w-fit mx-auto"></div>
+                    </div>
+                    <div class="w-fit mx-auto my-2">
+                        <GoogleLogin :callback="callback" />
+                    </div> 
+
                     <Button type="submit" class="w-full mb-3">Sign In</Button>
                     <Button class="w-full dark:text-white dark:bg-gray-800 dark:border-gray-400" variant="outline"
                         @click="cancel">Cancel</Button>
