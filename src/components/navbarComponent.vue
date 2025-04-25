@@ -66,6 +66,10 @@ const logout = () => {
               <RouterLink :to="{ name: 'home' }"
                 class="block text-black dark:text-white rounded">Home</RouterLink>
             </li>
+            <li v-if="storeAuth.user">
+              <RouterLink :to="{ name: 'load' }"
+                class="block text-black dark:text-white rounded">Convert</RouterLink>
+            </li>
           </ul>
         </div>
     

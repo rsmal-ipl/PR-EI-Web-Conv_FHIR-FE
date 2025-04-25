@@ -1,13 +1,22 @@
 <script setup>
 import Input from '@/components/ui/input/Input.vue'
 import Button from '@/components/ui/button/Button.vue'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { toast } from '@/components/ui/toast'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth.js'
+import { useConvertStore } from "@/stores/convert.js";
+import PreviewJson from '@/components/PreviewJson.vue'
+
+const router = useRouter()
+const storeAuth = useAuthStore()
+const storeConvert = useConvertStore()
 
 const jsonText = ref('')
 const showModal = ref(false)
 const formattedJson = ref('')
 const isDragging = ref(false)
+const inputFile = ref(null)
 
 const handleFileUpload = (event) => {
   const file = event.target.files[0]
@@ -38,7 +47,26 @@ const handleDrop = (event) => {
   }
 }
 
+const removeFile = () => {
+  jsonText.value = ''
+  showModal.value = false
+
+  if (inputFile.value?.inputRef) {
+    inputFile.value.inputRef.value = ''
+  }
+}
+
 const previewJson = () => {
+
+  if (!jsonText.value) {
+    toast({
+      title: "No JSON loaded!",
+      description: "Please load or enter a JSON file.",
+      variant: 'destructive'
+    })
+    return
+  }
+
   try {
     const json = JSON.parse(jsonText.value)
     formattedJson.value = JSON.stringify(json, null, 2)
@@ -52,16 +80,29 @@ const previewJson = () => {
   }
 }
 
-const inputFile = ref(null)
-
-const removeFile = () => {
-  jsonText.value = ''
-  showModal.value = false
-
-  if (inputFile.value?.inputRef) {
-    inputFile.value.inputRef.value = ''
+const next = () => {
+  if (!jsonText.value) {
+    toast({
+      title: "No JSON loaded!",
+      description: "Please load or enter a JSON file.",
+      variant: 'destructive'
+    })
+    return
   }
+  storeConvert.jsonText = jsonText.value
+  router.push({ name: 'configure' })
 }
+
+onMounted(() => {
+    if (!storeAuth.user) {
+        router.push("/login")
+    }
+
+    if(storeConvert.jsonText) {
+        jsonText.value = storeConvert.jsonText
+    }
+})
+
 </script>
 
 <template>
@@ -95,16 +136,12 @@ const removeFile = () => {
         </textarea>
       </div>
 
-      <Button @click="previewJson" class="w-full mb-3">Preview JSON</Button>
-    </div>
-
-    <div v-if="showModal" class="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center">
-      <div class="bg-white dark:bg-gray-900 p-6 rounded max-w-2xl w-full dark:text-white">
-        <h1 class="text-xl font-bold mb-4">JSON Preview</h1>
-        <pre class="bg-gray-100 dark:bg-gray-800 p-4 text-sm max-h-[60vh] overflow-auto rounded">{{ formattedJson }}</pre>
-
-        <Button @click="showModal = false" class="mt-4">Close</Button>
+      <div class="flex gap-2">
+        <Button @click="previewJson" class="w-full mb-3">Preview JSON</Button>
+        <Button @click="next" class="w-full mb-3">Next</Button>
       </div>
     </div>
+
+    <PreviewJson :isVisible="showModal" :json="formattedJson" @close="showModal = false"/>
   </div>
 </template>
