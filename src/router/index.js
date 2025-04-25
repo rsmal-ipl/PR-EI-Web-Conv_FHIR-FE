@@ -3,7 +3,8 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import { useAuthStore } from '@/stores/auth.js'
-import ConvertView from '@/views/ConvertView.vue'
+import ConvertView from '@/views/LoadView.vue'
+import ConfigureView from '@/views/ConfigureView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,9 +25,14 @@ const router = createRouter({
       component: RegisterView
     },
     {
-      path: '/convert',
-      name: 'convert',	
+      path: '/load',
+      name: 'load',	
       component: ConvertView
+    },
+    {
+      path: '/configure',
+      name: 'configure',	
+      component: ConfigureView
     }
 
   ],
