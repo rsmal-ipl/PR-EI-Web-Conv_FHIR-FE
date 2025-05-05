@@ -44,10 +44,10 @@ const placeholderText = computed(() => props.placeholder ?? 'Select an option')
 </script>
 
 <template>
-  <Combobox v-model="selected" by="label">
+ <Combobox v-model="selected" by="label">
     <ComboboxAnchor as-child>
       <ComboboxTrigger as-child>
-        <Button variant="outline" class="justify-between w-full">
+        <Button variant="default" class="justify-between w-full bg-white text-black hover:bg-white hover:text-black dark:hover:bg-white">
           {{ selected?.label ?? placeholderText }}
           <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -55,12 +55,12 @@ const placeholderText = computed(() => props.placeholder ?? 'Select an option')
     </ComboboxAnchor>
 
     <ComboboxList>
-      <div class="relative w-full max-w-sm items-center">
+      <div class="relative w-full max-w-sm items-center text-black rounded-sm bg-red-200">
         <ComboboxInput
-          class="pl-9 focus-visible:ring-0 border-0 border-b rounded-none h-10"
+          class="pl-9 focus-visible:ring-0 rounded-sm h-10 bg-white text-black"
           :placeholder="placeholderText"
         />
-        <span class="absolute start-0 inset-y-0 flex items-center justify-center px-3">
+        <span class="absolute start-0 inset-y-0 flex items-center justify-center px-3 text-black">
           <Search class="size-4 text-muted-foreground" />
         </span>
       </div>
@@ -69,7 +69,7 @@ const placeholderText = computed(() => props.placeholder ?? 'Select an option')
 
       <ComboboxGroup>
         <ComboboxItem
-           v-for="item in items"
+          v-for="item in items"
           :key="item.value"
           :value="item"
         >

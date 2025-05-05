@@ -7,6 +7,8 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.js'
 import { useConvertStore } from "@/stores/convert.js";
 import PreviewJson from '@/components/PreviewJson.vue'
+import SelectForm from '@/components/common/SelectForm.vue'
+import PageHeader from '@/components/PageHeader.vue'
 
 const router = useRouter()
 const storeAuth = useAuthStore()
@@ -89,6 +91,20 @@ const next = () => {
     })
     return
   }
+
+  try {
+    const json = JSON.parse(jsonText.value)
+    formattedJson.value = JSON.stringify(json, null, 2)
+    showModal.value = true
+  } catch (e) {
+    toast({
+      title: "Invalid JSON format!",
+      description: "Please check your input.",
+      variant: 'destructive'
+    })
+    return
+  }
+
   storeConvert.jsonText = jsonText.value
   router.push({ name: 'configure' })
 }
@@ -107,10 +123,7 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col justify-center items-center py-12 px-5 lg:px-8">
-    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-      <span class="text-5xl block w-fit mx-auto select-none">⚙️</span>
-      <h2 class="mt-5 text-center text-2xl/9 font-bold tracking-tight text-gray-900 dark:text-white">Convert</h2>
-    </div>
+    <PageHeader title="Load JSON"/>
 
     <div class="p-6 max-w-3xl w-full">
       <div class="mb-4">
@@ -136,7 +149,10 @@ onMounted(() => {
         </textarea>
       </div>
 
-      <div class="flex gap-2">
+      <p class="block font-medium my-3 text-gray-900 dark:text-white">JSON Source Format</p>
+      <SelectForm :items="storeConvert.jsonSchema" placeholder="&nbsp;" class="w-full bg-red-200"/>
+
+      <div class="flex flex-wrap sm:flex-nowrap gap-2 mt-5">
         <Button @click="previewJson" class="w-full mb-3">Preview JSON</Button>
         <Button @click="next" class="w-full mb-3">Next</Button>
       </div>

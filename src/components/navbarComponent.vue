@@ -26,22 +26,22 @@ const logout = () => {
 
 <template>
 
-    <nav class="bg-gray-100 dark:bg-gray-700 dark:text-white top-0 left-0 right-0 z-50">
+    <nav class="bg-gray-100 dark:bg-darkSecondary dark:text-white top-0 left-0 right-0 z-50">
       <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <div class="flex items-center space-x-3 rtl:space-x-reverse md:w-48 mb-1">
+        <div class="flex items-center space-x-3 rtl:space-x-reverse sm:w-48 mb-1">
             <span class="text-2xl">⚙️</span>
             <span class="sm:block text-lg font-semibold name_and_image"
                 >JSON to FHIR</span>
         </div>
     
         <div class=" ml-5 flex items-center md:order-2 space-x-3 md:space-x-0 justify-end rtl:space-x-reverse w-fit md:w-40">
-          <div class="flex justify-end">
+          <div class="hidden md:block md:w-64 text-right">
             <RouterLink :to="{ name: 'login' }" v-if="!storeAuth.user"
                 class="hover:text-gray-400 duration-300 transition">
                 Login
             </RouterLink>
-        <div v-else class="flex items-center space-x-2">
-            <p>Hello, {{storeAuth.user.name}} |</p>
+        <div v-else class="hidden md:block md:w-64 text-right space-x-2">
+            <p class="inline">Hello, {{storeAuth.userFirstName}} |</p>
             <button 
                 class="hover:text-gray-400 duration-300 transition"
                 @click="logout"
@@ -62,13 +62,27 @@ const logout = () => {
     
         <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-user">
           <ul class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-transparent rounded-lg bg-transparent md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0">
-            <li>
+            <li class="mt-5 md:mt-0">
               <RouterLink :to="{ name: 'home' }"
                 class="block text-black dark:text-white rounded">Home</RouterLink>
             </li>
-            <li v-if="storeAuth.user">
+            <li v-if="storeAuth.user" class="mt-5 md:mt-0">
               <RouterLink :to="{ name: 'load' }"
                 class="block text-black dark:text-white rounded">Convert</RouterLink>
+            </li>
+            <li v-if="storeAuth.user" class="mt-5 md:mt-0">
+              <RouterLink :to="{ name: 'load' }"
+                class="block text-black dark:text-white rounded">Settings</RouterLink>
+            </li>
+            <li v-if="storeAuth.user" class="md:hidden mt-5 md:mt-0 flex flex-wrap justify-between items-center">
+              <p>Hello, {{storeAuth.userFirstName}}</p>
+              <button class="hover:text-gray-400 duration-300 transition mt-5" @click="logout">Logout</button>
+            </li>
+            <li v-else class="md:hidden mt-5 md:mt-0 flex flex-wrap justify-between items-center">
+              <RouterLink :to="{ name: 'login' }" v-if="!storeAuth.user"
+                class="hover:text-gray-400 duration-300 transition">
+                Login
+            </RouterLink>
             </li>
           </ul>
         </div>

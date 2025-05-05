@@ -25,7 +25,7 @@ const handleSelect = (value: string) => {
 
 <template>
   <Select @update:modelValue="handleSelect">
-    <SelectTrigger class="w-full px-4 font-semibold">
+    <SelectTrigger class="w-full px-4 font-semibold bg-white">
       <SelectValue :placeholder="placeholder || 'Select an option'" />
     </SelectTrigger>
     <SelectContent>
