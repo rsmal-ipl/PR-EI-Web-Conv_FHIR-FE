@@ -9,6 +9,7 @@ import { toast } from '@/components/ui/toast'
 import ComboboxSelect from '@/components/common/ComboboxTrigger.vue'
 import { inject } from 'vue'
 import SelectForm from '@/components/common/SelectForm.vue';
+import PageHeader from '@/components/PageHeader.vue'
 
 import RadioGroupForm from '@/components/common/RadioGroupForm.vue'
 const alertDialog = inject('alertDialog')
@@ -18,13 +19,13 @@ const storeAuth = useAuthStore()
 const storeConvert = useConvertStore()
 
 const showModal = ref(false)
+const selected = ref()
 
 const preview = () => {
   router.push("/load")
 }
 
 const previewJson = () => {
-
   if (storeConvert.jsonText == "") {
     toast({
       title: "No JSON loaded!",
@@ -35,18 +36,6 @@ const previewJson = () => {
   } 
   showModal.value = true
 }
-
-const resources = [
-  { value: 'patient', label: 'Patient' },
-  { value: 'DiagnosticReport', label: 'Diagnostic Report' },
-  { value: 'Encounter', label: 'Encounter' },
-  { value: 'Boundle', label: 'Boundle' },
-]
-
-const options = [
-  { value: 'JSON', label: 'JSON' },
-  { value: 'XML', label: 'XML' }
-]
 
 const convert = () => {
   alertDialog.value.open(
@@ -66,38 +55,27 @@ onMounted(() => {
     }
 })
 
-const versions = [
-  { label: 'HL7v2', value: 'HL7 v2' },
-  { label: 'CDA', value: 'CDA' },
-  { label: 'Custom', value: 'Custom' },
-]
-
-const selected = ref()
-
 </script>
 
 
 <template>
   <div class="flex flex-col justify-center items-center py-12 px-5 lg:px-8">
-    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-      <span class="text-5xl block w-fit mx-auto select-none">⚙️</span>
-      <h2 class="mt-5 text-center text-2xl/9 font-bold tracking-tight text-gray-900 dark:text-white">Configure</h2>
-    </div>
+    <PageHeader title="Configure"/>
 
     <div class="p-6 max-w-3xl w-full">
 
       <Button @click="previewJson" class="w-full mb-3">Preview JSON</Button>
 
       <p class="block font-medium my-3 mb-2 text-gray-900 dark:text-white">Select a Resource</p>
-      <ComboboxSelect v-model="selected" :items="resources" placeholder="&nbsp;" class="w-full mb-5 !dark:text-white !text-black"/>
+      <ComboboxSelect v-model="selected" :items="storeConvert.resources" placeholder="&nbsp;" class="w-full mb-5 !dark:text-white !text-black"/>
 
       <p class="block font-medium my-3 text-gray-900 dark:text-white">Select a FHIR Version</p>
-      <SelectForm :items="versions" placeholder="&nbsp;" class="w-full bg-red-200"/>
+      <SelectForm :items="storeConvert.FHIRversion" placeholder="&nbsp;" class="w-full bg-red-200"/>
 
       <p class="block font-medium mt-3 mb-2 text-gray-900 dark:text-white">Select the Output Format</p>
-      <RadioGroupForm :options="options" defaultValue="JSON" name="outputFormat"/>
+      <RadioGroupForm :options="storeConvert.options" defaultValue="JSON" name="outputFormat"/>
 
-      <div class="flex wrap gap-2 mt-5">
+      <div class="flex flex-wrap sm:flex-nowrap gap-2 mt-5">
         <Button @click="preview" class="w-full mb-3">Previous</Button>
         <Button @click="convert" class="w-full mb-3">Convert</Button>
       </div>

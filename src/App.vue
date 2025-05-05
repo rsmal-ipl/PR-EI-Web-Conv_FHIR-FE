@@ -39,7 +39,7 @@ onMounted(() => {
     </main>
     
     <Button @click="toggleDarkMode"
-      class="fixed bottom-4 right-4 p-3 h-auto rounded-full bg-gray-200 dark:bg-gray-800 shadow-lg hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors">
+      class="fixed bottom-4 right-4 p-3 h-auto rounded-full bg-gray-300 dark:bg-gray-600 shadow-lg hover:bg-gray-400 dark:hover:bg-gray-700 transition-colors">
       {{ isDarkMode ? '🌙' : '☀️' }}
     </Button>
 
