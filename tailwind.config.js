@@ -13,7 +13,12 @@ module.exports = {
 		  md: 'calc(var(--radius) - 2px)',
 		  sm: 'calc(var(--radius) - 4px)'
 		},
-		colors: {}
+		colors: {
+			primary: '#ffffff',     
+			secondary: '#f2f5f6',    
+			darkPrimary: '#1f2937',  
+			darkSecondary: '#101826',
+		}
 	  }
 	},
 	plugins: [

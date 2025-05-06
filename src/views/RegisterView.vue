@@ -6,6 +6,7 @@ import Button from '@/components/ui/button/Button.vue'
 import { useErrorStore } from '@/stores/error'
 import { useAuthStore } from '@/stores/auth'
 import ErrorMessage from '@/components//common/ErrorMessage.vue'
+import PageHeader from '@/components/PageHeader.vue'
 
 const router = useRouter()
 const storeAuth = useAuthStore()
@@ -33,10 +34,7 @@ onMounted(() => {
 
 <template>
  <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-            <span class="text-5xl block w-fit mx-auto noselect">⚙️</span>
-            <h2 class="mt-5 text-center text-2xl/9 font-bold tracking-tight text-gray-900 dark:text-white">Register a new Account</h2>
-        </div>
+        <PageHeader title="Register a new Account"/>
 
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form class="space-y-6" @submit.prevent="register">

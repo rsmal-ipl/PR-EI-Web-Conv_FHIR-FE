@@ -17,11 +17,10 @@ export const useAuthStore = defineStore("auth", () => {
         return user.value ? user.value.name : "";
     });
 
-    const userFirstLastName = computed(() => {
+    const userFirstName = computed(() => {
         const names = userName.value.trim().split(" ");
         const firstName = names[0] ?? "";
-        const lastName = names.length > 1 ? names[names.length - 1] : "";
-        return (firstName + " " + lastName).trim();
+        return firstName.trim();
     });
 
     const userEmail = computed(() => {
@@ -66,7 +65,7 @@ export const useAuthStore = defineStore("auth", () => {
         } catch (e) {
             clearUser();
             storeError.setErrorMessages(
-                e.response.data.message,
+                e.response.data,
                 e.response.data.errors,
                 e.response.status,
                 "Authentication Error!"
@@ -106,7 +105,7 @@ export const useAuthStore = defineStore("auth", () => {
         } catch (e) {
             clearUser();
             storeError.setErrorMessages(
-                e.response.data.message,
+                e.response.data,
                 e.response.data.errors,
                 e.response.status,
                 "Registration Error!"
@@ -124,7 +123,7 @@ export const useAuthStore = defineStore("auth", () => {
         } catch (e) {
             clearUser();
             storeError.setErrorMessages(
-                e.response.data.message,
+                e.response.data,
                 [],
                 e.response.status,
                 "Authentication Error!"
@@ -156,7 +155,7 @@ export const useAuthStore = defineStore("auth", () => {
             router.push({ name: "home" });
         } catch (e) {
             clearUser();
-            // storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Token Refresh Error!')
+            storeError.setErrorMessages(e.response.data, e.response.data.errors, e.response.status, 'Google Login Error!')
             return false;
         }
     };
@@ -193,7 +192,7 @@ export const useAuthStore = defineStore("auth", () => {
             } catch (e) {
                 clearUser();
                 storeError.setErrorMessages(
-                    e.response.data.message,
+                    e.response.data,
                     e.response.data.errors,
                     e.response.status,
                     "Authentication Error!"
@@ -227,10 +226,54 @@ export const useAuthStore = defineStore("auth", () => {
         return false;
     };
 
+    const forgotPassword = async (userEmail) => {
+        storeError.resetMessages();
+        clearUser();
+        try {
+            await axios.post("forgot-password", {
+                email: userEmail
+            });
+            toast({
+                title: "Reset password email sent",
+                description: "Please check your email to reset your password.",
+            })
+            return true;
+        } catch (e) {
+            console.log(e.response.data)    
+            storeError.setErrorMessages(e.response.data, e.response.data.errors, e.response.status, 'Password Reset Error!')
+            return false;
+        }
+    }
+
+    const resetPassword = async (id, passwordToken, password) => {
+        storeError.resetMessages();
+        clearUser();
+        try {
+            await axios.post("reset-password", {
+                userId: id,
+                token: passwordToken,
+                newPassword: password
+            });
+
+            router.push({ name: "login" });
+
+            toast({
+                title: "Password reset successful",
+                description: "You can now log in with your new password.",
+            })
+            
+            return true;
+
+        } catch (e) {
+            storeError.setErrorMessages(e.response.data, e.response.data.errors, e.response.status, 'Password Reset Error!')
+            return false;
+        }
+    }
+
     return {
         user,
         userName,
-        userFirstLastName,
+        userFirstName,
         userEmail,
         userType,
         restoreToken,
@@ -238,5 +281,7 @@ export const useAuthStore = defineStore("auth", () => {
         login,
         logout,
         loginWithGoogle,
+        forgotPassword,
+        resetPassword
     };
 });

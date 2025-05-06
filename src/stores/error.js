@@ -43,19 +43,19 @@ export const useErrorStore = defineStore('error', () => {
         let toastMessage = mainMessage
         switch (status) {
             case 401:
-                toastMessage = 'Not Authorized!'
+                toastMessage =  mainMessage || 'Unauthorized!'
                 break
             case 403:
-                toastMessage = 'Forbidden!'
+                toastMessage = mainMessage || 'Forbidden!'
                 break
             case 404:
-                toastMessage = 'Resource not found!'
+                toastMessage = mainMessage || 'Resource Not Found!'
                 break
             case 422:
                 toastMessage = 'Data is invalid. Check field error messages!'
                 break
             default:
-                toastMessage = `An error occurred!`
+                toastMessage = mainMessage || `An error occurred!`
         }
         toast({
                 title: titleMessage,
