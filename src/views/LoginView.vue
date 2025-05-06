@@ -8,6 +8,7 @@ import { useAuthStore } from '@/stores/auth'
 import ErrorMessage from '@/components/common/ErrorMessage.vue'
 import { GoogleLogin } from 'vue3-google-login'
 import { toast } from '@/components/ui/toast'
+import PageHeader from '@/components/PageHeader.vue'
 
 const router = useRouter()
 const storeAuth = useAuthStore()
@@ -27,7 +28,8 @@ const cancel = () => {
 
 const login = () => {
 
-    if (!grecaptcha.getResponse()) {
+    const token = grecaptcha.getResponse()
+    if (!token) {
         toast({
             title: "reCAPTCHA Error!",
             description: "Please verify that you are not a robot.",
@@ -35,8 +37,8 @@ const login = () => {
         })
         return
     }
-    credentials.value.recaptchaResponse = "123"
-    storeAuth.login(credentials.value);
+    credentials.value.recaptchaResponse = token
+    storeAuth.login(credentials.value)
 }
 
 onMounted(() => {
@@ -64,12 +66,8 @@ const callback = (response) => {
 </script>
 
 <template>
-    <div class="flex min-h-full flex-col justify-center px-5 py-12 lg:px-8">
-        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-            <span class="text-5xl block w-fit mx-auto noselect">⚙️</span>
-            <h2 class="mt-5 text-center text-2xl/9 font-bold tracking-tight text-gray-900 dark:text-white">Sign in to
-                your account</h2>
-        </div>
+    <div class="flex min-h-full flex-col justify-center mx-2 sm:mx-5 py-12 lg:mx-8">
+        <PageHeader title="Sign in to your account"/>
 
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form class="space-y-6" @submit.prevent="login">
@@ -91,12 +89,12 @@ const callback = (response) => {
                         <ErrorMessage :errorMessage="storeError.fieldMessage('Password')"></ErrorMessage>
                         <RouterLink
                             class="font-semibold  text-sm text-indigo-600 dark:text-indigo-300 hover:text-indigo-500 "
-                            :to="{ name: 'register' }">Forgot your password?</RouterLink>
+                            :to="{ name: 'forgot-password' }">Forgot your password?</RouterLink>
                     </div>
                 </div>
                 <div>
                     <div class="w-fit mx-auto mt-2">
-                        <div id="recaptcha-container" class="w-fit mx-auto"></div>
+                        <div id="recaptcha-container" class="g-recaptcha"></div>
                     </div>
                     <div class="w-fit mx-auto my-2">
                         <GoogleLogin :callback="callback" />
@@ -115,3 +113,11 @@ const callback = (response) => {
         </div>
     </div>
 </template>
+
+<style scoped>
+@media only screen and (max-width: 500px) {
+    .g-recaptcha {
+        transform:scale(0.77);
+    }
+}
+</style>
