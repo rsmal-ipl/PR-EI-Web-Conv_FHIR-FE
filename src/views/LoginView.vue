@@ -9,6 +9,9 @@ import ErrorMessage from '@/components/common/ErrorMessage.vue'
 import { GoogleLogin } from 'vue3-google-login'
 import { toast } from '@/components/ui/toast'
 import PageHeader from '@/components/PageHeader.vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const router = useRouter()
 const storeAuth = useAuthStore()
@@ -31,8 +34,8 @@ const login = () => {
     const token = grecaptcha.getResponse()
     if (!token) {
         toast({
-            title: "reCAPTCHA Error!",
-            description: "Please verify that you are not a robot.",
+            title: t('recaptcha_error_title'),
+            description: t('recaptcha_error_message'),
             variant: 'destructive'
         })
         return
@@ -57,8 +60,8 @@ const callback = (response) => {
         storeAuth.loginWithGoogle(response)
     } else {
         toast({
-            title: "Google Sign-in error!",
-            description: "There was an issue signing in with Google. Please try again later.",
+            title: t('google_login_error_title'),
+            description: t('google_login_error_message'),
             variant: 'destructive'
         })
     }
@@ -67,12 +70,12 @@ const callback = (response) => {
 
 <template>
     <div class="flex min-h-full flex-col justify-center mx-2 sm:mx-5 py-12 lg:mx-8">
-        <PageHeader title="Sign in to your account"/>
+        <PageHeader :title="t('SignInToYourAccount')"/>
 
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form class="space-y-6" @submit.prevent="login">
                 <div class="text-gray-900 dark:text-white">
-                    <label for="email" class="block text-sm/6 font-medium">Email address</label>
+                    <label for="email" class="block text-sm/6 font-medium">{{t('Email_Address')}}</label>
                     <div class="mt-2">
                         <Input type="email" name="email" class="dark:border-gray-400" autocomplete="username"
                             v-model="credentials.email" />
@@ -81,7 +84,7 @@ const callback = (response) => {
                 </div>
                 <div class="text-gray-900 dark:text-white">
                     <div class="flex items-center justify-between">
-                        <label for="password" class="block text-sm/6 font-medium">Password</label>
+                        <label for="password" class="block text-sm/6 font-medium">{{t('Password')}}</label>
                     </div>
                     <div class="mt-2">
                         <Input type="password" name="password" class="dark:border-gray-400 mb-3"
@@ -89,7 +92,7 @@ const callback = (response) => {
                         <ErrorMessage :errorMessage="storeError.fieldMessage('Password')"></ErrorMessage>
                         <RouterLink
                             class="font-semibold  text-sm text-indigo-600 dark:text-indigo-300 hover:text-indigo-500 "
-                            :to="{ name: 'forgot-password' }">Forgot your password?</RouterLink>
+                            :to="{ name: 'forgot-password' }">{{ t('Forgot_Password') }}</RouterLink>
                     </div>
                 </div>
                 <div>
@@ -100,14 +103,14 @@ const callback = (response) => {
                         <GoogleLogin :callback="callback" />
                     </div> 
 
-                    <Button type="submit" class="w-full mb-3">Sign In</Button>
+                    <Button type="submit" class="w-full mb-3">{{ t('SignIn') }}</Button>
                     <Button class="w-full dark:text-white dark:bg-gray-800 dark:border-gray-400" variant="outline"
-                        @click="cancel">Cancel</Button>
+                        @click="cancel">{{ t('Cancel') }}</Button>
                 </div>
                 <div class="text-sm">
-                    <p class="font-semibold inline dark:text-white">Not a member?&nbsp;</p>
+                    <p class="font-semibold inline dark:text-white">{{ t('Not_a_member') }}&nbsp;</p>
                     <RouterLink class="font-semibold text-indigo-600 dark:text-indigo-300 hover:text-indigo-500"
-                        :to="{ name: 'register' }">Register here!</RouterLink>
+                        :to="{ name: 'register' }">{{ t('Register_here') }}</RouterLink>
                 </div>
             </form>
         </div>
