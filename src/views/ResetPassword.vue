@@ -9,7 +9,9 @@ import ErrorMessage from '@/components/common/ErrorMessage.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useRoute } from 'vue-router';
 import { toast } from "@/components/ui/toast";
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const router = useRouter()
 const storeError = useErrorStore()
 const route = useRoute()
@@ -36,8 +38,8 @@ const resetPassword = async () => {
 
     if (credentials.value.newPassword !== credentials.value.newPasswordConfirm) {
         toast({
-            title: 'Error',
-            description: 'Passwords do not match',
+            title: t('Error'),
+            description: t('PasswordsDoNotMatch'),
             variant: 'destructive'
         })
         return
@@ -58,12 +60,12 @@ onMounted(() => {
 
 <template>
     <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-        <PageHeader title="Reset Password" />
+        <PageHeader :title="t('ResetPassword')" />
 
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form class="space-y-6" @submit.prevent="resetPassword">
                 <div class="text-gray-900 dark:text-white">
-                    <label for="newPassword" class="block text-sm/6 font-medium">New Password</label>
+                    <label for="newPassword" class="block text-sm/6 font-medium">{{t('NewPassword')}}</label>
                     <div class="mt-2">
                         <Input type="password" name="newPassword" class="dark:border-gray-400" autocomplete="current-password"
                             v-model="credentials.newPassword" />
@@ -72,7 +74,7 @@ onMounted(() => {
                 </div>
                 <div class="text-gray-900 dark:text-white">
                     <div class="flex items-center justify-between">
-                        <label for="newPasswordConfirm" class="block text-sm/6 font-medium">Confirm Password</label>
+                        <label for="newPasswordConfirm" class="block text-sm/6 font-medium">{{t('ConfirmNewPassword')}}</label>
                     </div>
                     <div class="mt-2">
                         <Input type="password" name="newPasswordConfirm" class="dark:border-gray-400 mb-3"
@@ -81,8 +83,8 @@ onMounted(() => {
                     </div>
                 </div>
                 <div>
-                    <Button type="submit" class="w-full mb-3">Confirm</Button>
-                    <Button class="w-full dark:text-white dark:bg-gray-800 dark:border-gray-400" variant="outline"@click="cancel">Cancel</Button>
+                    <Button type="submit" class="w-full mb-3">{{ t('Confirm') }}</Button>
+                    <Button class="w-full dark:text-white dark:bg-gray-800 dark:border-gray-400" variant="outline"@click="cancel">{{ t('Cancel') }}</Button>
                 </div>
             </form>
         </div>

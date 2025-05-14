@@ -4,11 +4,13 @@ import axios from "axios";
 import { useRouter } from "vue-router";
 import { useErrorStore } from "@/stores/error.js";
 import { toast } from "@/components/ui/toast";
+import { useI18n } from 'vue-i18n'
 
 export const useAuthStore = defineStore("auth", () => {
     const router = useRouter();
     const storeError = useErrorStore();
 
+    const { t } = useI18n()
     const user = ref(null);
     const token = ref("");
     const refreshToken = ref("");
@@ -68,7 +70,7 @@ export const useAuthStore = defineStore("auth", () => {
                 e.response.data,
                 e.response.data.errors,
                 e.response.status,
-                "Authentication Error!"
+                t("AuthenticationError")
             );
             
             return false;
@@ -80,13 +82,13 @@ export const useAuthStore = defineStore("auth", () => {
         try {
             if (credentials.password !== credentials.passwordConfirm) {
                 const error = {
-                    ConfirmPassword: ["Passwords do not match!"],
+                    ConfirmPassword: [t("PasswordsDoNotMatch")],
                 };
                 storeError.setErrorMessages(
-                    "Passwords do not match!",
+                    t("PasswordsDoNotMatch"),
                     error,
                     422,
-                    "Registration Error!"
+                    t("RegistrationError")
                 );
                 return true;
             }
@@ -94,9 +96,9 @@ export const useAuthStore = defineStore("auth", () => {
             await axios.post("register", credentials);
 
             toast({
-                title: "Registration successful",
+                title: t("RegistrationSuccess"),
                 description:
-                    "Please check your email to verify your account.",
+                    t("RegistrationSuccessMessage"),
                 variant: "default",
             });
 
@@ -108,7 +110,7 @@ export const useAuthStore = defineStore("auth", () => {
                 e.response.data,
                 e.response.data.errors,
                 e.response.status,
-                "Registration Error!"
+                t("RegistrationError")
             );
             return false;
         }
@@ -126,7 +128,7 @@ export const useAuthStore = defineStore("auth", () => {
                 e.response.data,
                 [],
                 e.response.status,
-                "Authentication Error!"
+                t("AuthenticationError")
             );
             return false;
         }
@@ -155,7 +157,7 @@ export const useAuthStore = defineStore("auth", () => {
             router.push({ name: "home" });
         } catch (e) {
             clearUser();
-            storeError.setErrorMessages(e.response.data, e.response.data.errors, e.response.status, 'Google Login Error!')
+            storeError.setErrorMessages(e.response.data, e.response.data.errors, e.response.status, t("GoogleSignInError"));
             return false;
         }
     };
@@ -195,7 +197,7 @@ export const useAuthStore = defineStore("auth", () => {
                     e.response.data,
                     e.response.data.errors,
                     e.response.status,
-                    "Authentication Error!"
+                    t("AuthenticationError")
                 );
                 return false;
             }
@@ -234,13 +236,13 @@ export const useAuthStore = defineStore("auth", () => {
                 email: userEmail
             });
             toast({
-                title: "Reset password email sent",
-                description: "Please check your email to reset your password.",
+                title: t("ResetPassowordEmailTitle"),
+                description: t("ResetPasswordEmailMessage"),
             })
             return true;
         } catch (e) {
             console.log(e.response.data)    
-            storeError.setErrorMessages(e.response.data, e.response.data.errors, e.response.status, 'Password Reset Error!')
+            storeError.setErrorMessages(e.response.data, e.response.data.errors, e.response.status, t("ResetPasswordError"))
             return false;
         }
     }
@@ -258,14 +260,14 @@ export const useAuthStore = defineStore("auth", () => {
             router.push({ name: "login" });
 
             toast({
-                title: "Password reset successful",
-                description: "You can now log in with your new password.",
+                title: t("ResetPasswordSuccessTitle"),
+                description: t("ResetPasswordSuccessMessage"),
             })
             
             return true;
 
         } catch (e) {
-            storeError.setErrorMessages(e.response.data, e.response.data.errors, e.response.status, 'Password Reset Error!')
+            storeError.setErrorMessages(e.response.data, e.response.data.errors, e.response.status, t("ResetPasswordError"))
             return false;
         }
     }

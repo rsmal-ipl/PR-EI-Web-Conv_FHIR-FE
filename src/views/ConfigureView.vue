@@ -10,10 +10,12 @@ import ComboboxSelect from '@/components/common/ComboboxTrigger.vue'
 import { inject } from 'vue'
 import SelectForm from '@/components/common/SelectForm.vue';
 import PageHeader from '@/components/PageHeader.vue'
+import { useI18n } from 'vue-i18n'
 
 import RadioGroupForm from '@/components/common/RadioGroupForm.vue'
 const alertDialog = inject('alertDialog')
 
+const { t } = useI18n()
 const router = useRouter()
 const storeAuth = useAuthStore()
 const storeConvert = useConvertStore()
@@ -28,8 +30,8 @@ const preview = () => {
 const previewJson = () => {
   if (storeConvert.jsonText == "") {
     toast({
-      title: "No JSON loaded!",
-      description: "Please load or enter a JSON file.",
+      title: t('NoJsonLoad'),
+      description: t('NoJsonLoadMessage'),
       variant: 'destructive'
     })
     return
@@ -40,8 +42,8 @@ const previewJson = () => {
 const convert = () => {
   alertDialog.value.open(
         convertConfirmed,
-        'Are you sure?', 'Cancel', `Yes, convert `,
-        `This will convert the JSON to FHIR format. Do you want to continue?`,)
+        t('AreYouSure'), t('Cancel'), t('YesConvert'),
+        t('AreYouSureMessage'),)
 }
 
 const convertConfirmed = () => {
@@ -60,24 +62,24 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col justify-center items-center py-12 px-5 lg:px-8">
-    <PageHeader title="Configure"/>
+    <PageHeader :title="t('Configure')"/>
 
     <div class="p-6 max-w-3xl w-full">
 
-      <Button @click="previewJson" class="w-full mb-3">Preview JSON</Button>
+      <Button @click="previewJson" class="w-full mb-3">{{ t('PreviewJSON') }}</Button>
 
-      <p class="block font-medium my-3 mb-2 text-gray-900 dark:text-white">Select a Resource</p>
+      <p class="block font-medium my-3 mb-2 text-gray-900 dark:text-white">{{ t('SelectResource') }}</p>
       <ComboboxSelect v-model="selected" :items="storeConvert.resources" placeholder="&nbsp;" class="w-full mb-5 !dark:text-white !text-black"/>
 
-      <p class="block font-medium my-3 text-gray-900 dark:text-white">Select a FHIR Version</p>
-      <SelectForm :items="storeConvert.FHIRversion" placeholder="&nbsp;" class="w-full bg-red-200"/>
+      <p class="block font-medium my-3 text-gray-900 dark:text-white">{{ t('SelectFHIRVersion') }}</p>
+      <SelectForm :items="storeConvert.FHIRversion" placeholder="&nbsp;" class="w-full"/>
 
-      <p class="block font-medium mt-3 mb-2 text-gray-900 dark:text-white">Select the Output Format</p>
+      <p class="block font-medium mt-3 mb-2 text-gray-900 dark:text-white">{{ t('SelectOutputFormat') }}</p>
       <RadioGroupForm :options="storeConvert.options" defaultValue="JSON" name="outputFormat"/>
 
       <div class="flex flex-wrap sm:flex-nowrap gap-2 mt-5">
-        <Button @click="preview" class="w-full mb-3">Previous</Button>
-        <Button @click="convert" class="w-full mb-3">Convert</Button>
+        <Button @click="preview" class="w-full mb-3">{{ t('Previous') }}</Button>
+        <Button @click="convert" class="w-full mb-3">{{ t('Convert') }}</Button>
       </div>
     </div>
     

@@ -1,9 +1,11 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useToast } from '@/components/ui/toast/use-toast'
+import { useI18n } from 'vue-i18n'
 
 export const useErrorStore = defineStore('error', () => {
     const { toast } = useToast()
+    const { t } = useI18n()
 
     const _message = ref('');
     const _fieldErrorMessages = ref([]);
@@ -43,19 +45,19 @@ export const useErrorStore = defineStore('error', () => {
         let toastMessage = mainMessage
         switch (status) {
             case 401:
-                toastMessage =  mainMessage || 'Unauthorized!'
+                toastMessage =  mainMessage || t('Unauthorized')
                 break
             case 403:
-                toastMessage = mainMessage || 'Forbidden!'
+                toastMessage = mainMessage || t('Forbidden')
                 break
             case 404:
-                toastMessage = mainMessage || 'Resource Not Found!'
+                toastMessage = mainMessage || t('ResourceNotFound')
                 break
             case 422:
-                toastMessage = 'Data is invalid. Check field error messages!'
+                toastMessage = t('DataIsInvalid')
                 break
             default:
-                toastMessage = mainMessage || `An error occurred!`
+                toastMessage = mainMessage || t('AnErrorOccurred')
         }
         toast({
                 title: titleMessage,
