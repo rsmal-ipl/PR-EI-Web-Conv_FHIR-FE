@@ -72,12 +72,12 @@ const logout = () => {
                 class="block text-black dark:text-white rounded">{{ t('Convert') }}</RouterLink>
             </li>
             <li v-if="storeAuth.user" class="mt-5 md:mt-0">
-              <RouterLink :to="{ name: 'load' }"
-                class="block text-black dark:text-white rounded">{{ t('Settings') }}</RouterLink>
+              <RouterLink :to="{ name: 'History' }"
+                class="block text-black dark:text-white rounded">{{ t('History') }}</RouterLink>
             </li>
             <li v-if="storeAuth.user" class="md:hidden mt-5 md:mt-0 flex flex-wrap justify-between items-center">
               <p>Hello, {{storeAuth.userFirstName}}</p>
-              <button class="hover:text-gray-400 duration-300 transition mt-5 sm-mt-0" @click="logout">{{ t('Logout') }}</button>
+              <button class="hover:text-gray-400 duration-300 transition sm-mt-0" @click="logout">{{ t('Logout') }}</button>
             </li>
             <li v-else class="md:hidden mt-5 md:mt-0 flex flex-wrap justify-between items-center">
               <RouterLink :to="{ name: 'login' }" v-if="!storeAuth.user"

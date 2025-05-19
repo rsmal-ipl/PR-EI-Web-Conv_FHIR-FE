@@ -41,6 +41,8 @@
   "SelectResource": "Select a resource",
   "SelectFHIRVersion": "Select a FHIR version",
   "SelectOutputFormat": "Select the Output Format",
+  "FHIRServerIP": "FHIR Server IP",
+  "SendOutputToFHIRServer": "Send Output to FHIR Server",
   "Previous": "Previous",
 
   "LoadJSON": "Load JSON",
@@ -84,6 +86,39 @@
   "Forbidden": "Forbidden!",
   "ResourceNotFound": "Resource Not Found!",
   "DataIsInvalid": "Data is invalid. Check field error messages!",
-  "AnErrorOccurred": "An error occurred!"
+  "AnErrorOccurred": "An error occurred!",
+
+  "History": "History",
+  "ConversionHistory": "Conversion History",
+  "Username": "Username",
+  "User": "User",
+  "OutputFormat": "Output Format",
+  "FHIRVersion": "FHIR Version",
+  "Resource": "Resource",
+  "ConversionDate": "Conversion Date",
+  "DateFrom": "Date From:",
+  "DateTo": "Date To:",
+  "ShowAllConversions": "Show All Conversions",
+  "Details": "Details",
+  "PreviousPage": "Previous Page",
+  "NextPage": "Next Page",
+  "NoConversionsFound": "No conversions found",
+  "Page": "Page",
+  "Total": "Total",
+  "ErrorLoadingConversions": "Error loading conversions",
+
+
+  "ConversionDetails": "Conversion Details",
+  "Property": "Property",
+  "Value": "Value",
+  "PreviewInput": "Preview Input",
+  "PreviewOutput": "Preview Output",
+  "ErrorLoadingConversionDetails": "Error loading conversion details",
+  "InputContentNotAvailableTitle": "Input content not available",
+  "InputContentNotAvailableMessage": "The input content is not available for this conversion.",
+  "OutputContentNotAvailableTitle": "Output content not available",
+  "OutputContentNotAvailableMessage": "The output content is not available for this conversion.",
+  "Input": "Input",
+  "Output": "Output"
 
 }
