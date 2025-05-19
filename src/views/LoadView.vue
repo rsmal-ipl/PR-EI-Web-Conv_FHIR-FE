@@ -108,6 +108,8 @@ const next = () => {
   }
 
   storeConvert.jsonText = jsonText.value
+  console.log("jsonText.value", jsonText.value)
+  console.log("storeConvert.jsonText", storeConvert.selectedJSONSchema)
   router.push({ name: 'configure' })
 }
 
@@ -152,7 +154,7 @@ onMounted(() => {
       </div>
 
       <p class="block font-medium my-3 text-gray-900 dark:text-white">{{ t('JSONSourceFormat') }}</p>
-      <SelectForm :items="storeConvert.jsonSchema" placeholder="&nbsp;" class="w-full bg-red-200"/>
+      <SelectForm  v-model="storeConvert.selectedJSONSchema" :items="storeConvert.jsonSchema" placeholder="&nbsp;" class="w-full bg-red-200"/>
 
       <div class="flex flex-wrap sm:flex-nowrap gap-2 mt-5">
         <Button @click="previewJson" class="w-full mb-3">{{ t('PreviewJSON') }}</Button>
@@ -160,6 +162,6 @@ onMounted(() => {
       </div>
     </div>
 
-    <PreviewJson :isVisible="showModal" :json="formattedJson" @close="showModal = false"/>
+      <PreviewJson :isVisible="showModal" :json="formattedJson" @close="showModal = false" :title="t('PreviewJSON')"/>
   </div>
 </template>

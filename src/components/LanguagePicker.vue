@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/select'
 import { defineProps, ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import axios from 'axios'
 
 const { locale } = useI18n()
 
@@ -29,13 +30,17 @@ const selected = ref(
 
 watch(selected, (val) => {
   const lang = props.items.find(i => i.value === val)?.flag
-  if (lang) locale.value = lang
+  if (lang) {
+    locale.value = lang
+    axios.defaults.headers.common['Accept-Language'] = lang
+  }
 })
 
 const selectedItem = computed(() =>
   props.items.find((item) => item.value === selected.value)
 )
 </script>
+
 
 <template>
   <Select v-model="selected">
