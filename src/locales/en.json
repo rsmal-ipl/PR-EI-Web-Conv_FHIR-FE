@@ -119,6 +119,11 @@
   "OutputContentNotAvailableTitle": "Output content not available",
   "OutputContentNotAvailableMessage": "The output content is not available for this conversion.",
   "Input": "Input",
-  "Output": "Output"
+  "Output": "Output",
+
+  "Users": "Users",
+  "Role": "Role",
+  "ChangeRole": "Change Role"
+
 
 }

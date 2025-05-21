@@ -9,6 +9,7 @@ import ResetPassword from '@/views/ResetPassword.vue'
 import ForgotPassword from '@/views/ForgotPassword.vue'
 import HistoryView from '@/views/HistoryView.vue'
 import ConversionView from '@/views/ConversionView.vue'
+import UsersView from '@/views/UsersView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -57,6 +58,11 @@ const router = createRouter({
       path: '/conversion/:id',
       name: 'Conversion',
       component: ConversionView
+    },
+    {
+      path: '/users',
+      name: 'Users',
+      component: UsersView
     }
 
   ],

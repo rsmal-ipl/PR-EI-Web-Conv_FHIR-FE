@@ -37,7 +37,7 @@ const handleSelect = (value: string) => {
           :key="item.value"
           :value="item.value"
         >
-          {{ item.value }}
+          {{ item.label }}
         </SelectItem>
       </SelectGroup>
     </SelectContent>
