@@ -103,7 +103,7 @@ onMounted(() => {
                 </div>
             </div>
         </div>
-        <div class="flex items-center justify-center space-x-2 mb-5" v-if="storeAuth.user.roles.includes('Admin')">
+        <div class="flex items-center justify-center space-x-2 mb-5" v-if="storeAuth?.user?.roles.includes('Admin')">
             <Checkbox id="showAll" v-model="filters.showAll" v-if="storeAuth.user?.roles?.includes('Admin')" />
             <Label for="showAll" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                 {{ t('ShowAllConversions') }}
@@ -116,7 +116,7 @@ onMounted(() => {
                     class="min-w-[900px] text-sm mx-auto text-left border text-center bg-white dark:bg-darkSecondary dark:text-white">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
-                            <th class="py-3 px-6" v-if="storeAuth.user?.roles?.includes('User') || (storeAuth.user?.roles?.includes('Admin') && filters.showAll)">{{t('User')}}</th>
+                            <th class="py-3 px-6" v-if="storeAuth.user?.roles?.includes('Admin') && filters.showAll">{{t('User')}}</th>
                             <th class="py-3 px-6">{{ t('ConversionDate') }}</th>
                             <th class="py-3 px-6">{{ t('Resource') }}</th>
                             <th class="py-3 px-6">{{ t('FHIRVersion') }}</th>
@@ -128,7 +128,7 @@ onMounted(() => {
                     <tbody>
                         <tr v-for="conv in conversions" :key="conv.id"
                             class="bg-white dark:bg-darkSecondary dark:text-white border-b">
-                            <td class="py-4 px-2" v-if="storeAuth.user?.roles?.includes('User') || (storeAuth.user?.roles?.includes('Admin') && filters.showAll)">{{ conv.userName }}</td>
+                            <td class="py-4 px-2" v-if="storeAuth.user?.roles?.includes('Admin') && filters.showAll">{{ conv.userName }}</td>
                             <td class="py-4 px-2">{{ new Date(conv.createdAtUtc).toLocaleString() }}</td>
                             <td class="py-4 px-2">{{ conv.resource }}</td>
                             <td class="py-4 px-2">{{ conv.fhirVersion }}</td>

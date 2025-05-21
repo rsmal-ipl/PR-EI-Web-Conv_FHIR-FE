@@ -65,11 +65,18 @@ export const useConvertStore = defineStore('convert', () => {
                 description: 'Failed to get conversions.',
                 variant: 'destructive',
             })
-            return
+            return {
+                data: [],
+                totalCount: 0,
+                totalPages: 1,
+                page: params.page || 1,
+                pageSize: params.pageSize || 10,
+            }
         }
     };
 
-    const convert = async() => {
+
+    const convert = async () => {
         if (!jsonText.value) {
             toast({
                 title: 'Error',
@@ -130,7 +137,7 @@ export const useConvertStore = defineStore('convert', () => {
             selectedResource.value = null
             selectedOutputFormat.value = null
 
-            router.push({name: 'Conversion', params: { id: response.data }})
+            router.push({ name: 'Conversion', params: { id: response.data } })
             return;
         } catch (e) {
             storeError.setErrorMessages(e.response?.data, e.response?.data.errors, e.response?.status, 'Conversion Error')
