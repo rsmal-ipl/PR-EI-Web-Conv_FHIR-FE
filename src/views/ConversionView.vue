@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useConvertStore } from '@/stores/convert'
 import { toast } from '@/components/ui/toast'
@@ -9,6 +9,7 @@ import { useI18n } from 'vue-i18n'
 import Button from '@/components/ui/button/Button.vue'
 import { useAuthStore } from '@/stores/auth.js'
 
+const alertDialog = inject('alertDialog')
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
@@ -22,6 +23,9 @@ const conversion = ref(null)
 const showModal = ref(false)
 const modalContent = ref('')
 const modalTitle = ref('')
+
+const isEditing = ref(false)
+const copyOutputContent = ref('')
 
 const loadConversion = async () => {
     try {
@@ -41,7 +45,6 @@ const loadConversion = async () => {
         loading.value = false
     }
 }
-
 
 const previewInput = () => {
     if (!conversion.value.originalContent) {
@@ -71,6 +74,82 @@ const previewOutput = () => {
     showModal.value = true
 }
 
+const edit = () => {
+    if (!conversion.value.originalContent) {
+        toast({
+            title: t('OutputContentNotAvailableTitle'),
+            description: t('OutputContentNotAvailableMessage'),
+            variant: 'destructive'
+        })
+        return
+    }
+    isEditing.value = !isEditing.value
+    copyOutputContent.value = conversion.value.originalContent // ALTERAR QUANDO EXISTIR OUTPUT
+}
+
+
+const saveChangesConfirmed = async () => {
+    console.log()
+    const result = await convertStore.changeOutput(copyOutputContent.value, id.value)
+    if (result) {
+        isEditing.value = false
+        loadConversion()
+    }
+}
+
+const saveChanges = async () => {
+    if (conversion.value.outputFormat.toUpperCase().trim() === 'JSON') {
+        try {
+            const json = JSON.parse(copyOutputContent.value)
+            copyOutputContent.value = JSON.stringify(json, null, 2)
+        } catch (e) {
+            toast({
+                title: t('InvalidJsonFormat'),
+                description: t('InvalidJsonFormatMessage'),
+                variant: 'destructive'
+            })
+            return
+        }
+    }
+    alertDialog.value.open(
+        saveChangesConfirmed,
+        t('AreYouSure'),
+        t('Cancel'),
+        "Yes, Save",
+        "Are you sure you want to apply the changes?", ""
+    )
+}
+
+const cancelChangesConfirmed = () => {
+    isEditing.value = false
+    copyOutputContent.value = conversion.value.originalContent
+}
+
+const cancelChanges = () => {
+    alertDialog.value.open(
+        cancelChangesConfirmed,
+        t('AreYouSure'),
+        "No",
+        "Yes, Cancel",
+        "Are you sure you want to cancel the changes? This will delete all unsaved changes.",
+        ""
+    )
+}
+
+const deleteConversion =  () => {
+    alertDialog.value.open(
+        deleteConversionConfirmed,
+        t('AreYouSure'),
+        "No",
+        "Yes, Delete",
+        "Are you sure you want to delete this conversion?",
+        ""
+    )
+}
+
+const deleteConversionConfirmed = async () => {
+    await convertStore.deleteConversion(id.value)
+}
 
 onMounted(() => {
     if (!storeAuth.user) {
@@ -86,8 +165,13 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="flex flex-col justify-center items-center py-12 px-5 lg:px-8 max-w-fit mx-auto">
+    <div class="flex flex-col justify-center items-center py-12 px-5 lg:px-8 max-w-3xl mx-auto">
         <PageHeader :title="t('ConversionDetails')" />
+
+        <div class="flex flex-wrap sm:flex-nowrap justify-center gap-2 mt-5 sm:mb-0 max-w-sm w-full">
+            <Button @click="previewInput" class="w-full mx-auto">{{ t('PreviewInput') }}</Button>
+            <Button @click="previewOutput" class="w-full mx-auto">{{ t('PreviewOutput') }}</Button>
+        </div>
 
         <div class="overflow-x-auto relative rounded-lg mt-5 w-full">
             <table class="mx-auto text-sm text-left border text-center bg-white dark:bg-darkSecondary dark:text-white">
@@ -126,12 +210,22 @@ onMounted(() => {
             </table>
         </div>
 
-        <div class="flex flex-wrap sm:flex-nowrap gap-2 mt-5 sm:mb-0 mb-2 w-full">
-            <Button @click="previewInput" class="w-full mb-3">{{ t('PreviewInput') }}</Button>
-            <Button @click="previewOutput" class="w-full mb-3">{{ t('PreviewOutput') }}</Button>
+        <div class="flex flex-wrap sm:flex-nowrap justify-center gap-2 mt-5 sm:mb-0 max-w-sm w-full"> 
+            <Button @click="deleteConversion" class="w-full mx-auto" variant="destructive">Delete Conversion</Button>
+            <Button v-if="!isEditing" @click="edit()" class="w-full mx-auto":disabled="!conversion?.originalContent">Edit Output</Button>
+            <div v-else class="max-w-sm w-full flex flex-wrap sm:flex-nowrap gap-2 max-w-sm w-full">
+                <Button @click="saveChanges()" class="w-full mx-auto">Save Changes</Button>
+                <Button @click="cancelChanges()" class="w-full mx-auto">Cancel Changes</Button>
+            </div>
         </div>
 
-        <Button @click="router.push({ name: 'History' })" class="w-full">{{ t('Cancel') }}</Button>
+        <Button @click="router.push({ name: 'History' })" class="w-fit mx-auto mt-5">Return</Button>
+
+        <div class="mb-4 w-full" v-if="isEditing">
+            <p class="block font-medium my-3 text-gray-900 dark:text-white">Edit Output</p>
+            <textarea v-model="copyOutputContent" rows="8"
+                class="w-full border rounded p-2 bg-gray-50 dark:bg-gray-700 dark:text-white"></textarea>
+        </div>
 
         <PreviewJson :isVisible="showModal" :json="modalContent" @close="showModal = false" :title="modalTitle" />
     </div>

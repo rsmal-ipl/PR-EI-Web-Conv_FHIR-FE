@@ -4,8 +4,11 @@ import { useToast } from '@/components/ui/toast/use-toast'
 import { useRouter } from "vue-router";
 import axios from 'axios';
 import { useErrorStore } from "@/stores/error.js";
+import { useI18n } from 'vue-i18n'
 
 export const useConvertStore = defineStore('convert', () => {
+
+    const { t } = useI18n()
     const { toast } = useToast()
     const router = useRouter();
     const storeError = useErrorStore();
@@ -41,6 +44,47 @@ export const useConvertStore = defineStore('convert', () => {
         { value: 'XML', label: 'XML' }
     ]
 
+    const deleteConversion = async (id) => {
+        try {
+            await axios.delete(`/convert/${id}`);
+            toast({
+                title: t('Success'),
+                description: "Conversion deleted successfully",
+                variant: 'default',
+            })
+            router.push('/history')
+            return true
+        } catch (error) {
+            console.error('Error deleting conversion:', error);
+            toast({
+                title: 'Error',
+                description: 'Failed to delete conversion.',
+                variant: 'destructive',
+            })
+            return false
+        }
+    }
+
+    const changeOutput = async (newOutput, id) => {
+        try {
+            await axios.put(`/convert/${id}`, { newOutput })
+            toast({
+                title: t('Success'),
+                description: "Output content updated successfully",
+                variant: 'default',
+            })
+            return true
+        } catch (error) {
+            console.error('Error changing output:', error);
+            toast({
+                title: 'Error',
+                description: 'Failed to change Output.',
+                variant: 'destructive',
+            })
+            return false
+        }
+    }
+
     const getConversion = async (id) => {
         try {
             const response = await axios.get(`/convert/${id}`);
@@ -74,7 +118,6 @@ export const useConvertStore = defineStore('convert', () => {
             }
         }
     };
-
 
     const convert = async () => {
         if (!jsonText.value) {
@@ -152,8 +195,7 @@ export const useConvertStore = defineStore('convert', () => {
 
     return {
         jsonText, FHIRversion, jsonSchema, resources, options,
-        selectedJSONSchema, selectedFHIRVersion, selectedResource, selectedOutputFormat,
-        FHIRServerIP,
-        convert, getAllConversions, getConversion
+        selectedJSONSchema, selectedFHIRVersion, selectedResource, selectedOutputFormat, FHIRServerIP,
+        convert, getAllConversions, getConversion, changeOutput, deleteConversion
     }
 })
