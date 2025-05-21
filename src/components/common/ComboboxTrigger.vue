@@ -14,6 +14,9 @@ import {
   ComboboxTrigger
 } from '@/components/ui/combobox'
 import { Check, ChevronsUpDown, Search } from 'lucide-vue-next'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 interface Option {
   label: string
@@ -65,7 +68,7 @@ const placeholderText = computed(() => props.placeholder ?? 'Select an option')
         </span>
       </div>
 
-      <ComboboxEmpty>No option found.</ComboboxEmpty>
+      <ComboboxEmpty>{{ t('NoOptionFound') }}</ComboboxEmpty>
 
       <ComboboxGroup>
         <ComboboxItem

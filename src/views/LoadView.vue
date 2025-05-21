@@ -9,7 +9,9 @@ import { useConvertStore } from "@/stores/convert.js";
 import PreviewJson from '@/components/PreviewJson.vue'
 import SelectForm from '@/components/common/SelectForm.vue'
 import PageHeader from '@/components/PageHeader.vue'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const router = useRouter()
 const storeAuth = useAuthStore()
 const storeConvert = useConvertStore()
@@ -42,8 +44,8 @@ const handleDrop = (event) => {
     reader.readAsText(file)
   } else {
     toast({
-      title: "Invalid file type!",
-      description: "Only JSON files are accepted.",
+      title: t('InvalidFileType'),
+      description: t('InvalidFileTypeMessage'),
       variant: 'destructive'
     })
   }
@@ -62,8 +64,8 @@ const previewJson = () => {
 
   if (!jsonText.value) {
     toast({
-      title: "No JSON loaded!",
-      description: "Please load or enter a JSON file.",
+      title: t('NoJsonLoad'),
+      description: t('NoJsonLoadMessage'),
       variant: 'destructive'
     })
     return
@@ -75,8 +77,8 @@ const previewJson = () => {
     showModal.value = true
   } catch (e) {
     toast({
-      title: "Invalid JSON format!",
-      description: "Please check your input.",
+      title: t('InvalidJsonFormat'),
+      description: t('InvalidJsonFormatMessage'),
       variant: 'destructive'
     })
   }
@@ -85,8 +87,8 @@ const previewJson = () => {
 const next = () => {
   if (!jsonText.value) {
     toast({
-      title: "No JSON loaded!",
-      description: "Please load or enter a JSON file.",
+      title: t('NoJsonLoad'),
+      description: t('NoJsonLoadMessage'),
       variant: 'destructive'
     })
     return
@@ -98,14 +100,16 @@ const next = () => {
     showModal.value = true
   } catch (e) {
     toast({
-      title: "Invalid JSON format!",
-      description: "Please check your input.",
+      title: t('InvalidJsonFormat'),
+      description: t('InvalidJsonFormatMessage'),
       variant: 'destructive'
     })
     return
   }
 
   storeConvert.jsonText = jsonText.value
+  console.log("jsonText.value", jsonText.value)
+  console.log("storeConvert.jsonText", storeConvert.selectedJSONSchema)
   router.push({ name: 'configure' })
 }
 
@@ -123,25 +127,25 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-col justify-center items-center py-12 px-5 lg:px-8">
-    <PageHeader title="Load JSON"/>
+    <PageHeader :title="t('LoadJSON')"/>
 
     <div class="p-6 max-w-3xl w-full">
       <div class="mb-4">
-        <p class="block font-medium my-3 text-gray-900 dark:text-white">Load JSON File</p>
+        <p class="block font-medium my-3 text-gray-900 dark:text-white">{{ t('LoadJSON') }}</p>
         <div class="flex">
             <Input type="file" accept="application/json" @change="handleFileUpload" ref="inputFile" class="p-2 mb-3 dark:bg-white" />
-            <Button v-if="jsonText" @click="removeFile" class="ml-2">Clear</Button>
+            <Button v-if="jsonText" @click="removeFile" class="ml-2">{{ t('Clear') }}</Button>
         </div>
       </div>
 
       <div @dragover.prevent="isDragging = true" @dragleave.prevent="isDragging = false" @drop.prevent="handleDrop" class="border-2 border-dashed p-6 rounded text-center transition mb-4"
         :class="isDragging ? 'border-gray-200 bg-gray-200 dark:bg-gray-500' : 'border-gray-300'">
-        <p class="text-gray-800 dark:text-white">Drag a JSON file here</p>
-        <p class="text-sm text-gray-500 dark:text-gray-400">(or use the button)</p>
+        <p class="text-gray-800 dark:text-white">{{ t('DragJSONFileHere') }}</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400">({{ t('OrUseButton') }})</p>
       </div>
 
       <div class="mb-4">
-        <p class="block font-medium my-3 text-gray-900 dark:text-white">Edit JSON manually</p>
+        <p class="block font-medium my-3 text-gray-900 dark:text-white">{{ t('EditJSONManually') }}</p>
         <textarea
           v-model="jsonText"
           rows="8"
@@ -149,15 +153,15 @@ onMounted(() => {
         </textarea>
       </div>
 
-      <p class="block font-medium my-3 text-gray-900 dark:text-white">JSON Source Format</p>
-      <SelectForm :items="storeConvert.jsonSchema" placeholder="&nbsp;" class="w-full bg-red-200"/>
+      <p class="block font-medium my-3 text-gray-900 dark:text-white">{{ t('JSONSourceFormat') }}</p>
+      <SelectForm  v-model="storeConvert.selectedJSONSchema" :items="storeConvert.jsonSchema" placeholder="&nbsp;" class="w-full bg-red-200"/>
 
       <div class="flex flex-wrap sm:flex-nowrap gap-2 mt-5">
-        <Button @click="previewJson" class="w-full mb-3">Preview JSON</Button>
-        <Button @click="next" class="w-full mb-3">Next</Button>
+        <Button @click="previewJson" class="w-full mb-3">{{ t('PreviewJSON') }}</Button>
+        <Button @click="next" class="w-full mb-3">{{ t('Next') }}</Button>
       </div>
     </div>
 
-    <PreviewJson :isVisible="showModal" :json="formattedJson" @close="showModal = false"/>
+      <PreviewJson :isVisible="showModal" :json="formattedJson" @close="showModal = false" :title="t('PreviewJSON')"/>
   </div>
 </template>
