@@ -8,8 +8,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-
 import { defineProps, defineEmits } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps<{
   items: { label: string, value: string }[]
@@ -26,7 +28,7 @@ const handleSelect = (value: string) => {
 <template>
   <Select @update:modelValue="handleSelect">
     <SelectTrigger class="w-full px-4 font-semibold bg-white">
-      <SelectValue :placeholder="placeholder || 'Select an option'" />
+      <SelectValue :placeholder="placeholder || t('SelectAnOption')" />
     </SelectTrigger>
     <SelectContent>
       <SelectGroup>
@@ -35,7 +37,7 @@ const handleSelect = (value: string) => {
           :key="item.value"
           :value="item.value"
         >
-          {{ item.value }}
+          {{ item.label }}
         </SelectItem>
       </SelectGroup>
     </SelectContent>

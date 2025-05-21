@@ -28,8 +28,7 @@ onMounted(() => {
 
 <template>
   <Toaster />
-
-  <GlobalAlertDialog />
+  <GlobalAlertDialog ref="alert-dialog"></GlobalAlertDialog>
 
   <div class="min-h-screen flex flex-col">
     <NavbarComponent />

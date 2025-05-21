@@ -7,6 +7,7 @@ import App from './App.vue'
 import router from './router'
 import axios from 'axios'
 import vue3GoogleLogin from 'vue3-google-login'
+import i18n from './i18n'
 
 const app = createApp(App)
 
@@ -19,6 +20,8 @@ app.use(vue3GoogleLogin, {
 const apiDomain = import.meta.env.VITE_API_URL
 
 axios.defaults.baseURL = `http://${apiDomain}/api`
+
+app.use(i18n)
 app.use(createPinia())
 app.use(router)
 

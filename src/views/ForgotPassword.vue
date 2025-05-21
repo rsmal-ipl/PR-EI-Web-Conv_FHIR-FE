@@ -7,7 +7,9 @@ import Button from '@/components/ui/button/Button.vue'
 import { useErrorStore } from '@/stores/error'
 import ErrorMessage from '@/components/common/ErrorMessage.vue'
 import { useAuthStore } from '@/stores/auth'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const router = useRouter()
 const storeError = useErrorStore()
 const storeAuth = useAuthStore()
@@ -26,19 +28,19 @@ const forgotPassword = () => {
 
 <template>
     <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-        <PageHeader title="Forgot Password" />
+        <PageHeader :title="t('ForgotPassword')" />
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form class="space-y-6" @submit.prevent="forgotPassword">
                 <div class="text-gray-900 dark:text-white">
-                    <label for="email" class="block text-sm/6 font-medium">Email</label>
+                    <label for="email" class="block text-sm/6 font-medium">{{ t('Email_Address') }}</label>
                     <div class="mt-2">
                         <Input type="email" name="email" class="dark:border-gray-400" autocomplete="username" v-model="email" />
                         <ErrorMessage :errorMessage="storeError.fieldMessage('Email')"></ErrorMessage>
                     </div>
                 </div>
                 <div>
-                    <Button type="submit" class="w-full mb-3">Reset Password</Button>
-                    <Button class="w-full dark:text-white dark:bg-gray-800 dark:border-gray-400" variant="outline"@click="cancel">Cancel</Button>
+                    <Button type="submit" class="w-full mb-3">{{ t('ResetPassword') }}</Button>
+                    <Button class="w-full dark:text-white dark:bg-gray-800 dark:border-gray-400" variant="outline"@click="cancel">{{ t('Cancel') }}</Button>
                 </div>
             </form>
         </div>
