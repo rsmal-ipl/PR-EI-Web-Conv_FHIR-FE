@@ -129,7 +129,7 @@ onMounted(() => {
                   {{ role }}
                 </span>
               </td>
-              <td class="py-4 px-2 cursor-pointer" @click="changeRoleConfirmed(user.id, user.roles.includes('User') ? 'Admin' : 'User')">
+              <td class="py-4 px-2 cursor-pointer" @click="changeRoleConfirmed(user.id, user.roles.includes('User') ? 'Admin' : 'User')" v-if="storeAuth.user?.roles?.includes('Owner') && !user.roles.includes('Owner')">
                 <svg class="w-6 h-6 text-gray-800 dark:text-white mx-auto" aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"

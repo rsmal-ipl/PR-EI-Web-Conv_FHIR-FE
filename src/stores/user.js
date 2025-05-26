@@ -13,6 +13,7 @@ export const useUsersStore = defineStore('users', () => {
     const { t } = useI18n()
 
     const roles = [
+        { value: 'Owner', label: 'Owner' },
         { value: 'Admin', label: 'Admin' },
         { value: 'User', label: 'User' },
     ]
