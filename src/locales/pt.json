@@ -109,6 +109,7 @@
   "OutputContentNotAvailableMessage": "Resultado não disponível para esta conversão.",
   "Input": "Entrada",
   "Output": "Saída",
+  "EditOutput": "Editar resultado",
 
   "Users": "Utilizadores",
   "Role": "Cargo",
