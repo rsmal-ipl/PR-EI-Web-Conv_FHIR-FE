@@ -211,9 +211,9 @@ onMounted(() => {
         </div>
 
         <div class="flex flex-wrap sm:flex-nowrap justify-center gap-2 mt-5 sm:mb-0 max-w-sm w-full"> 
-            <Button @click="deleteConversion" class="w-full mx-auto" variant="destructive">Delete Conversion</Button>
+            <Button @click="deleteConversion" class="w-full mx-auto" variant="destructive" v-if="storeAuth.user?.roles?.includes('Owner') || storeAuth.user?.roles?.includes('Admin')">Delete Conversion</Button>
             <Button v-if="!isEditing" @click="edit()" class="w-full mx-auto":disabled="!conversion?.originalContent">Edit Output</Button>
-            <div v-else class="max-w-sm w-full flex flex-wrap sm:flex-nowrap gap-2 max-w-sm w-full">
+            <div v-else class="flex flex-wrap sm:flex-nowrap gap-2 max-w-sm w-full">
                 <Button @click="saveChanges()" class="w-full mx-auto">Save Changes</Button>
                 <Button @click="cancelChanges()" class="w-full mx-auto">Cancel Changes</Button>
             </div>
