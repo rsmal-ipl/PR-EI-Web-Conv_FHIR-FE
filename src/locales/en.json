@@ -120,6 +120,7 @@
   "OutputContentNotAvailableMessage": "The output content is not available for this conversion.",
   "Input": "Input",
   "Output": "Output",
+  "EditOutput": "Edit Output",
 
   "Users": "Users",
   "Role": "Role",
