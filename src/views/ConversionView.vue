@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, inject } from 'vue'
+import { ref, onMounted, inject, nextTick, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useConvertStore } from '@/stores/convert'
 import { toast } from '@/components/ui/toast'
@@ -74,8 +74,24 @@ const previewOutput = () => {
     showModal.value = true
 }
 
+const minHeight = 8 * 24
+
+const autoResize = () => {
+    const el = autoResizeTextarea.value
+    if (el) {
+        el.style.height = 'auto'
+        el.style.height = Math.max(el.scrollHeight, minHeight) + 'px'
+    }
+}
+
+const autoResizeTextarea = ref(null)
+
+watch(copyOutputContent, () => {
+    nextTick(() => autoResize())
+})
+
 const edit = () => {
-    if (!conversion.value.originalContent) {
+    if (!conversion.value.originalContent) { //Mudar para outputContent
         toast({
             title: t('OutputContentNotAvailableTitle'),
             description: t('OutputContentNotAvailableMessage'),
@@ -84,7 +100,8 @@ const edit = () => {
         return
     }
     isEditing.value = !isEditing.value
-    copyOutputContent.value = conversion.value.originalContent // ALTERAR QUANDO EXISTIR OUTPUT
+    copyOutputContent.value = conversion.value.originalContent
+    nextTick(() => autoResize())
 }
 
 
@@ -211,20 +228,25 @@ onMounted(() => {
         </div>
 
         <div class="flex flex-wrap sm:flex-nowrap justify-center gap-2 mt-5 sm:mb-0 max-w-sm w-full"> 
-            <Button @click="deleteConversion" class="w-full mx-auto" variant="destructive">Delete Conversion</Button>
-            <Button v-if="!isEditing" @click="edit()" class="w-full mx-auto":disabled="!conversion?.originalContent">Edit Output</Button>
+            <Button @click="deleteConversion" class="w-full mx-auto" variant="destructive">{{ t('DeleteConversion') }}</Button>
+            <Button v-if="!isEditing" @click="edit()" class="w-full mx-auto":disabled="!conversion?.originalContent">{{ t('EditOutput') }}</Button>
             <div v-else class="max-w-sm w-full flex flex-wrap sm:flex-nowrap gap-2 max-w-sm w-full">
-                <Button @click="saveChanges()" class="w-full mx-auto">Save Changes</Button>
-                <Button @click="cancelChanges()" class="w-full mx-auto">Cancel Changes</Button>
+                <Button @click="saveChanges()" class="w-full mx-auto">{{ t('SaveChanges') }}</Button>
+                <Button @click="cancelChanges()" class="w-full mx-auto">{{ t('CancelChanges') }}</Button>
             </div>
         </div>
 
-        <Button @click="router.push({ name: 'History' })" class="w-fit mx-auto mt-5">Return</Button>
+        <Button @click="router.push({ name: 'History' })" class="w-fit mx-auto mt-5">{{ t('Return') }}</Button>
 
         <div class="mb-4 w-full" v-if="isEditing">
-            <p class="block font-medium my-3 text-gray-900 dark:text-white">Edit Output</p>
-            <textarea v-model="copyOutputContent" rows="8"
-                class="w-full border rounded p-2 bg-gray-50 dark:bg-gray-700 dark:text-white"></textarea>
+            <p class="block font-medium my-3 text-gray-900 dark:text-white">{{ t('EditOutput') }}</p>
+            <textarea
+                ref="autoResizeTextarea"
+                v-model="copyOutputContent"
+                @input="autoResize"
+                rows="8"
+                class="w-full border rounded p-2 bg-gray-50 dark:bg-gray-700 dark:text-white overflow-hidden resize-none">
+            </textarea>
         </div>
 
         <PreviewJson :isVisible="showModal" :json="modalContent" @close="showModal = false" :title="modalTitle" />
