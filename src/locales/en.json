@@ -120,10 +120,22 @@
   "OutputContentNotAvailableMessage": "The output content is not available for this conversion.",
   "Input": "Input",
   "Output": "Output",
+  "EditOutput": "Edit Output",
+  "SaveChanges": "Save Changes",
+  "Return": "Return",
+  "DeleteConversion": "Delete Conversion",
+  "CancelChanges": "Cancel Changes",
+
 
   "Users": "Users",
   "Role": "Role",
-  "ChangeRole": "Change Role"
+  "ChangeRole": "Change Role",
+
+  "Statistics": "Statistics",
+  "TotalConversions": "Total Conversions",
+  "ConversionsByUser": "Conversions by User",
+  "ResourceDistribution": "Resource Distribution",
+  "ConversionsLast30Days": "Conversions in the last 30 days"
 
 
 }

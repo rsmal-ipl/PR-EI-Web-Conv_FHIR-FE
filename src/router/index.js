@@ -10,6 +10,7 @@ import ForgotPassword from '@/views/ForgotPassword.vue'
 import HistoryView from '@/views/HistoryView.vue'
 import ConversionView from '@/views/ConversionView.vue'
 import UsersView from '@/views/UsersView.vue'
+import StatisticsView from '@/views/StatisticsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -63,8 +64,12 @@ const router = createRouter({
       path: '/users',
       name: 'Users',
       component: UsersView
-    }
-
+    },
+    {
+      path: '/statistics',
+      name: 'Statistics',
+      component: StatisticsView
+    } 
   ],
 })
 

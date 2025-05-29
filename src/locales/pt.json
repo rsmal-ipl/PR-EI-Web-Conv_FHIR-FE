@@ -109,8 +109,19 @@
   "OutputContentNotAvailableMessage": "Resultado não disponível para esta conversão.",
   "Input": "Entrada",
   "Output": "Saída",
+  "EditOutput": "Editar resultado",
+  "SaveChanges": "Guardar alterações",
+  "Return": "Voltar",
+  "DeleteConversion": "Eliminar conversão",
+  "CancelChanges": "Cancelar alterações",
 
   "Users": "Utilizadores",
   "Role": "Cargo",
-  "ChangeRole": "Alterar cargo"
+  "ChangeRole": "Alterar para",
+
+  "Statistics": "Estatísticas",
+  "TotalConversions": "Total de conversões",
+  "ConversionsByUser": "Conversões por utilizador",
+  "ResourceDistribution": "Distribuição de Recursos",
+  "ConversionsLast30Days": "Conversões nos últimos 30 dias"
 }

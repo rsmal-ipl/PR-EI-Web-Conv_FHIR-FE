@@ -75,6 +75,14 @@ const logout = () => {
               <RouterLink :to="{ name: 'History' }"
                 class="block text-black dark:text-white rounded">{{ t('History') }}</RouterLink>
             </li>
+            <li v-if="storeAuth.user && storeAuth.user?.roles?.includes('Admin')" class="mt-5 md:mt-0">
+              <RouterLink :to="{ name: 'Statistics' }"
+                class="block text-black dark:text-white rounded">{{ t('Statistics') }}</RouterLink>
+            </li>
+              <li v-if="storeAuth.user && storeAuth.user?.roles?.includes('Admin')" class="mt-5 md:mt-0">
+              <RouterLink :to="{ name: 'Users' }"
+                class="block text-black dark:text-white rounded">{{ t('Users') }}</RouterLink>
+            </li>
             <li v-if="storeAuth.user" class="md:hidden mt-5 md:mt-0 flex flex-wrap justify-between items-center">
               <p>Hello, {{storeAuth.userFirstName}}</p>
               <button class="hover:text-gray-400 duration-300 transition sm-mt-0" @click="logout">{{ t('Logout') }}</button>

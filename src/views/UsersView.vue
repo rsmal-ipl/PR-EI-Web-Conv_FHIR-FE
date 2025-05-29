@@ -138,7 +138,7 @@ onMounted(() => {
                     d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
                 </svg>
                 <p class="text-sm text-gray-500 dark:text-white">
-                  Change to <b>{{ user.roles.includes('User') ? 'Admin' : 'User' }}</b>
+                  {{ t('ChangeRole') }} <b>{{ user.roles.includes('User') ? 'Admin' : 'User' }}</b>
                 </p>
               </td>
             </tr>
