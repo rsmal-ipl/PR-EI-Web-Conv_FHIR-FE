@@ -97,7 +97,7 @@ onMounted(() => {
         <Button v-if="filters.name" @click="filters.name = ''" class="w-fit p-3">X</Button>
       </div>
       <div class="flex gap-2">
-        <Input v-model="filters.email" :placeholder="t('Email')" class="font-semibold !placeholder-gray-500" />
+        <Input v-model="filters.email" :placeholder="t('Email_Address')" class="font-semibold !placeholder-gray-500" />
         <Button v-if="filters.email" @click="filters.email = ''" class="w-fit p-3">X</Button>
       </div>
 
@@ -114,9 +114,9 @@ onMounted(() => {
           <thead class="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
               <th class="py-3 px-6">{{ t('Name') }}</th>
-              <th class="py-3 px-6">{{ t('Email') }}</th>
+              <th class="py-3 px-6">{{ t('Email_Address') }}</th>
               <th class="py-3 px-6">{{ t('Role') }}</th>
-              <th class="py-3 px-6">{{ t('ChangeRole') }}</th>
+              <th class="py-3 px-6" v-if="storeAuth.user?.roles?.includes('Owner')">{{ t('ChangeRole') }}</th>
             </tr>
           </thead>
           <tbody>

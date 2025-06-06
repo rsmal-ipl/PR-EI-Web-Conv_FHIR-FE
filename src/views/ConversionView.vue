@@ -236,15 +236,10 @@ onMounted(() => {
         @click="deleteConversion" 
         class="w-full mx-auto" 
         variant="destructive" 
-        v-if="storeAuth.user?.roles?.includes('Owner') || storeAuth.user?.roles?.includes('Admin')"
-      >
+        v-if="storeAuth.user?.roles?.includes('Owner') || storeAuth.user?.roles?.includes('Admin')">
         Delete Conversion
       </Button>
-      <Button v-if="!isEditing" @click="edit()" class="w-full mx-auto" :disabled="!conversion?.originalContent">{{ t('EditOutput') }}</Button>
-      <div v-else class="flex flex-wrap sm:flex-nowrap gap-2 max-w-sm w-full">
-        <Button @click="saveChanges()" class="w-full mx-auto">Save Changes</Button>
-        <Button @click="cancelChanges()" class="w-full mx-auto">Cancel Changes</Button>
-      </div>
+      <Button v-if="storeAuth.user?.roles?.includes('Owner') || storeAuth.user?.roles?.includes('Admin')" @click="edit()" class="w-full mx-auto" :disabled="!conversion?.originalContent">{{ t('EditOutput') }}</Button>
     </div>
 
     <Button @click="router.push({ name: 'History' })" class="w-fit mx-auto mt-5">Return</Button>

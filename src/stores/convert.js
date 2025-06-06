@@ -49,16 +49,15 @@ export const useConvertStore = defineStore('convert', () => {
             await axios.delete(`/convert/${id}`);
             toast({
                 title: t('Success'),
-                description: "Conversion deleted successfully",
+                description: t('ConversionDeletedSuccessfully'),
                 variant: 'default',
             })
             router.push('/history')
             return true
         } catch (error) {
-            console.error('Error deleting conversion:', error);
             toast({
-                title: 'Error',
-                description: 'Failed to delete conversion.',
+                title: t('Error'),
+                description: t('FailedToDeleteConversion'),
                 variant: 'destructive',
             })
             return false
@@ -70,15 +69,15 @@ export const useConvertStore = defineStore('convert', () => {
             await axios.put(`/convert/${id}`, { newOutput })
             toast({
                 title: t('Success'),
-                description: "Output content updated successfully",
+                description: t('OutputContentUpdatedSuccessfully'),
                 variant: 'default',
             })
             return true
         } catch (error) {
             console.error('Error changing output:', error);
             toast({
-                title: 'Error',
-                description: 'Failed to change Output.',
+                title: t('Error'),
+                description: t('FailedToChangeOutput'),
                 variant: 'destructive',
             })
             return false
@@ -91,8 +90,8 @@ export const useConvertStore = defineStore('convert', () => {
             return response.data;
         } catch (error) {
             toast({
-                title: 'Error',
-                description: 'Failed to get conversion details.',
+                title: t('Error'),
+                description: t('FailedToGetConversionDetails'),
                 variant: 'destructive',
             })
             router.push('/history')
@@ -105,8 +104,8 @@ export const useConvertStore = defineStore('convert', () => {
             return response.data;
         } catch (err) {
             toast({
-                title: 'Error',
-                description: 'Failed to get conversions.',
+                title: t('Error'),
+                description: t('FailedToGetAllConversions'),
                 variant: 'destructive',
             })
             return {
@@ -122,40 +121,40 @@ export const useConvertStore = defineStore('convert', () => {
     const convert = async () => {
         if (!jsonText.value) {
             toast({
-                title: 'Error',
-                description: 'Please enter JSON text to convert.',
+                title: t('Error'),
+                description: t('PleaseEnterJSONTextToConvert'),
                 variant: 'destructive',
             })
             return
         }
         if (!selectedJSONSchema.value) {
             toast({
-                title: 'Error',
-                description: 'Please select a JSON schema.',
-                variant: 'destructive',
-            })
-            return
-        }
-        if (!selectedFHIRVersion.value) {
-            toast({
-                title: 'Error',
-                description: 'Please select a FHIR version.',
+                title: t('Error'),
+                description: t('PleaseSelectJsonSchema'),
                 variant: 'destructive',
             })
             return
         }
         if (!selectedResource.value) {
             toast({
-                title: 'Error',
-                description: 'Please select a resource type.',
+                title: t('Error'),
+                description: t('PleaseSelectResource'),
+                variant: 'destructive',
+            })
+            return
+        }
+        if (!selectedFHIRVersion.value) {
+            toast({
+                title: t('Error'),
+                description: t('PleaseSelectFHIRVersion'),
                 variant: 'destructive',
             })
             return
         }
         if (!selectedOutputFormat.value) {
             toast({
-                title: 'Error',
-                description: 'Please select an output format.',
+                title: t('Error'),
+                description: t('PleaseSelectOutputFormat'),
                 variant: 'destructive',
             })
             return
@@ -170,8 +169,8 @@ export const useConvertStore = defineStore('convert', () => {
                 OutputFormat: selectedOutputFormat.value
             })
             toast({
-                title: "Conversion Success!",
-                description: "Your conversion was successful. Please check the results.",
+                title: t('ConversionSuccessful'),
+                description: t('ConversionSuccessMessage'),
             })
 
             jsonText.value = null
@@ -185,8 +184,8 @@ export const useConvertStore = defineStore('convert', () => {
         } catch (e) {
             storeError.setErrorMessages(e.response?.data, e.response?.data.errors, e.response?.status, 'Conversion Error')
             toast({
-                title: 'Error',
-                description: 'Conversion failed. Please try again.',
+                title: t('Error'),
+                description: t('ConversionFailed'),
                 variant: 'destructive',
             })
             return false;

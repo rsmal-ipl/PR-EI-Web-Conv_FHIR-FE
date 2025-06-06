@@ -64,24 +64,24 @@ const logout = () => {
         <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-user">
           <ul class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-transparent rounded-lg bg-transparent md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0">
             <li class="mt-5 md:mt-0">
-              <RouterLink :to="{ name: 'home' }"
-                class="block text-black dark:text-white rounded">{{ t('Home') }}</RouterLink>
+              <RouterLink :to="{ name: 'home' }" activeClass="bg-gray-200 dark:bg-gray-700"
+                class="block p-2 text-black dark:text-white rounded">{{ t('Home') }}</RouterLink>
             </li>
             <li v-if="storeAuth.user" class="mt-5 md:mt-0">
-              <RouterLink :to="{ name: 'load' }"
-                class="block text-black dark:text-white rounded">{{ t('Convert') }}</RouterLink>
+              <RouterLink :to="{ name: 'load' }" activeClass="bg-gray-200 dark:bg-gray-700"
+                class="block p-2 text-black dark:text-white rounded">{{ t('Convert') }}</RouterLink>
             </li>
             <li v-if="storeAuth.user" class="mt-5 md:mt-0">
-              <RouterLink :to="{ name: 'History' }"
-                class="block text-black dark:text-white rounded">{{ t('History') }}</RouterLink>
+              <RouterLink :to="{ name: 'History' }" activeClass="bg-gray-200 dark:bg-gray-700"
+                class="block p-2 text-black dark:text-white rounded">{{ t('History') }}</RouterLink>
             </li>
-            <li v-if="storeAuth.user && storeAuth.user?.roles?.includes('Admin')" class="mt-5 md:mt-0">
-              <RouterLink :to="{ name: 'Statistics' }"
-                class="block text-black dark:text-white rounded">{{ t('Statistics') }}</RouterLink>
+            <li v-if="storeAuth.user && (storeAuth.user?.roles?.includes('Admin') || storeAuth.user?.roles?.includes('Owner'))" class="mt-5 md:mt-0">
+              <RouterLink :to="{ name: 'Statistics' }" activeClass="bg-gray-200 dark:bg-gray-700"
+                class="block p-2 text-black dark:text-white rounded">{{ t('Statistics') }}</RouterLink>
             </li>
-              <li v-if="storeAuth.user && storeAuth.user?.roles?.includes('Admin')" class="mt-5 md:mt-0">
-              <RouterLink :to="{ name: 'Users' }"
-                class="block text-black dark:text-white rounded">{{ t('Users') }}</RouterLink>
+              <li v-if="storeAuth.user && (storeAuth.user?.roles?.includes('Admin') || storeAuth.user?.roles?.includes('Owner'))" class="mt-5 md:mt-0">
+              <RouterLink :to="{ name: 'Users' }" activeClass="bg-gray-200 dark:bg-gray-700"
+                class="block p-2 text-black dark:text-white rounded">{{ t('Users') }}</RouterLink>
             </li>
             <li v-if="storeAuth.user" class="md:hidden mt-5 md:mt-0 flex flex-wrap justify-between items-center">
               <p>Hello, {{storeAuth.userFirstName}}</p>
