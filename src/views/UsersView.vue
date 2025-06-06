@@ -97,7 +97,7 @@ onMounted(() => {
         <Button v-if="filters.name" @click="filters.name = ''" class="w-fit p-3">X</Button>
       </div>
       <div class="flex gap-2">
-        <Input v-model="filters.email" :placeholder="t('Email')" class="font-semibold !placeholder-gray-500" />
+        <Input v-model="filters.email" :placeholder="t('Email_Address')" class="font-semibold !placeholder-gray-500" />
         <Button v-if="filters.email" @click="filters.email = ''" class="w-fit p-3">X</Button>
       </div>
 
@@ -114,9 +114,9 @@ onMounted(() => {
           <thead class="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
               <th class="py-3 px-6">{{ t('Name') }}</th>
-              <th class="py-3 px-6">{{ t('Email') }}</th>
+              <th class="py-3 px-6">{{ t('Email_Address') }}</th>
               <th class="py-3 px-6">{{ t('Role') }}</th>
-              <th class="py-3 px-6">{{ t('ChangeRole') }}</th>
+              <th class="py-3 px-6" v-if="storeAuth.user?.roles?.includes('Owner')">{{ t('ChangeRole') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -129,7 +129,7 @@ onMounted(() => {
                   {{ role }}
                 </span>
               </td>
-              <td class="py-4 px-2 cursor-pointer" @click="changeRoleConfirmed(user.id, user.roles.includes('User') ? 'Admin' : 'User')">
+              <td class="py-4 px-2 cursor-pointer" @click="changeRoleConfirmed(user.id, user.roles.includes('User') ? 'Admin' : 'User')" v-if="storeAuth.user?.roles?.includes('Owner') && !user.roles.includes('Owner')">
                 <svg class="w-6 h-6 text-gray-800 dark:text-white mx-auto" aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
@@ -138,7 +138,7 @@ onMounted(() => {
                     d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
                 </svg>
                 <p class="text-sm text-gray-500 dark:text-white">
-                  Change to <b>{{ user.roles.includes('User') ? 'Admin' : 'User' }}</b>
+                  {{ t('ChangeRole') }} <b>{{ user.roles.includes('User') ? 'Admin' : 'User' }}</b>
                 </p>
               </td>
             </tr>

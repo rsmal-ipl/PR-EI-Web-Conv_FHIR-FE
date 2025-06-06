@@ -4,8 +4,11 @@ import { useToast } from '@/components/ui/toast/use-toast'
 import { useRouter } from "vue-router";
 import axios from 'axios';
 import { useErrorStore } from "@/stores/error.js";
+import { useI18n } from 'vue-i18n'
 
 export const useConvertStore = defineStore('convert', () => {
+
+    const { t } = useI18n()
     const { toast } = useToast()
     const router = useRouter();
     const storeError = useErrorStore();
@@ -41,14 +44,54 @@ export const useConvertStore = defineStore('convert', () => {
         { value: 'XML', label: 'XML' }
     ]
 
+    const deleteConversion = async (id) => {
+        try {
+            await axios.delete(`/convert/${id}`);
+            toast({
+                title: t('Success'),
+                description: t('ConversionDeletedSuccessfully'),
+                variant: 'default',
+            })
+            router.push('/history')
+            return true
+        } catch (error) {
+            toast({
+                title: t('Error'),
+                description: t('FailedToDeleteConversion'),
+                variant: 'destructive',
+            })
+            return false
+        }
+    }
+
+    const changeOutput = async (newOutput, id) => {
+        try {
+            await axios.put(`/convert/${id}`, { newOutput })
+            toast({
+                title: t('Success'),
+                description: t('OutputContentUpdatedSuccessfully'),
+                variant: 'default',
+            })
+            return true
+        } catch (error) {
+            console.error('Error changing output:', error);
+            toast({
+                title: t('Error'),
+                description: t('FailedToChangeOutput'),
+                variant: 'destructive',
+            })
+            return false
+        }
+    }
+
     const getConversion = async (id) => {
         try {
             const response = await axios.get(`/convert/${id}`);
             return response.data;
         } catch (error) {
             toast({
-                title: 'Error',
-                description: 'Failed to get conversion details.',
+                title: t('Error'),
+                description: t('FailedToGetConversionDetails'),
                 variant: 'destructive',
             })
             router.push('/history')
@@ -61,8 +104,8 @@ export const useConvertStore = defineStore('convert', () => {
             return response.data;
         } catch (err) {
             toast({
-                title: 'Error',
-                description: 'Failed to get conversions.',
+                title: t('Error'),
+                description: t('FailedToGetAllConversions'),
                 variant: 'destructive',
             })
             return {
@@ -75,44 +118,43 @@ export const useConvertStore = defineStore('convert', () => {
         }
     };
 
-
     const convert = async () => {
         if (!jsonText.value) {
             toast({
-                title: 'Error',
-                description: 'Please enter JSON text to convert.',
+                title: t('Error'),
+                description: t('PleaseEnterJSONTextToConvert'),
                 variant: 'destructive',
             })
             return
         }
         if (!selectedJSONSchema.value) {
             toast({
-                title: 'Error',
-                description: 'Please select a JSON schema.',
-                variant: 'destructive',
-            })
-            return
-        }
-        if (!selectedFHIRVersion.value) {
-            toast({
-                title: 'Error',
-                description: 'Please select a FHIR version.',
+                title: t('Error'),
+                description: t('PleaseSelectJsonSchema'),
                 variant: 'destructive',
             })
             return
         }
         if (!selectedResource.value) {
             toast({
-                title: 'Error',
-                description: 'Please select a resource type.',
+                title: t('Error'),
+                description: t('PleaseSelectResource'),
+                variant: 'destructive',
+            })
+            return
+        }
+        if (!selectedFHIRVersion.value) {
+            toast({
+                title: t('Error'),
+                description: t('PleaseSelectFHIRVersion'),
                 variant: 'destructive',
             })
             return
         }
         if (!selectedOutputFormat.value) {
             toast({
-                title: 'Error',
-                description: 'Please select an output format.',
+                title: t('Error'),
+                description: t('PleaseSelectOutputFormat'),
                 variant: 'destructive',
             })
             return
@@ -127,8 +169,8 @@ export const useConvertStore = defineStore('convert', () => {
                 OutputFormat: selectedOutputFormat.value
             })
             toast({
-                title: "Conversion Success!",
-                description: "Your conversion was successful. Please check the results.",
+                title: t('ConversionSuccessful'),
+                description: t('ConversionSuccessMessage'),
             })
 
             jsonText.value = null
@@ -142,8 +184,8 @@ export const useConvertStore = defineStore('convert', () => {
         } catch (e) {
             storeError.setErrorMessages(e.response?.data, e.response?.data.errors, e.response?.status, 'Conversion Error')
             toast({
-                title: 'Error',
-                description: 'Conversion failed. Please try again.',
+                title: t('Error'),
+                description: t('ConversionFailed'),
                 variant: 'destructive',
             })
             return false;
@@ -152,8 +194,7 @@ export const useConvertStore = defineStore('convert', () => {
 
     return {
         jsonText, FHIRversion, jsonSchema, resources, options,
-        selectedJSONSchema, selectedFHIRVersion, selectedResource, selectedOutputFormat,
-        FHIRServerIP,
-        convert, getAllConversions, getConversion
+        selectedJSONSchema, selectedFHIRVersion, selectedResource, selectedOutputFormat, FHIRServerIP,
+        convert, getAllConversions, getConversion, changeOutput, deleteConversion
     }
 })

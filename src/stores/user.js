@@ -13,6 +13,7 @@ export const useUsersStore = defineStore('users', () => {
     const { t } = useI18n()
 
     const roles = [
+        { value: 'Owner', label: 'Owner' },
         { value: 'Admin', label: 'Admin' },
         { value: 'User', label: 'User' },
     ]
@@ -24,8 +25,8 @@ export const useUsersStore = defineStore('users', () => {
             return response.data;
         } catch (err) {
             toast({
-                title: 'Error',
-                description: 'Failed to get users.',
+                title: t('Error'),
+                description: t('FailedToGetUsers'),
                 variant: 'destructive',
             })
             return {
@@ -42,8 +43,8 @@ export const useUsersStore = defineStore('users', () => {
         try {
             const response = await axios.put(`/user/${userId}`, { Role: role });
             toast({
-                title: 'Success',
-                description: 'User role changed successfully.',
+                title: t('Success'),
+                description: t('UserRoleChangedSuccessfully'),
                 variant: 'default',
             })
             return;

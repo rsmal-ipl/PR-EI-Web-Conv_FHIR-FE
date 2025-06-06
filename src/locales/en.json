@@ -8,13 +8,10 @@
   "Cancel": "Cancel",
   "Error": "Error",
 
-
   "recaptcha_error_title": "Recaptcha Error",
   "recaptcha_error_message": "Please verify that you are not a robot.",
-
   "googel_error_title": "Google Sign-in error!",
   "google_error_message": "There was an issue signing in with Google. Please try again later.",
-
   "SignInToYourAccount": "Sign in to your account",
   "Email_Address": "Email Address",
   "Password": "Password",
@@ -22,6 +19,8 @@
   "SignIn": "Sign In",
   "Not_a_member": "Not a member?",
   "Register_here": "Register here!",
+  "SignUp": "Sign Up",
+  "SignUpToYourAccount": "Sign up to your account",
 
   "RegisterNewAccount": "Register a new account",
   "Name": "Name",
@@ -29,7 +28,6 @@
   "Register": "Register",
   "Already_a_member": "Already a member?",
   "SignIn_here": "Sign in here!",
-
 
   "Configure": "Configure",
   "NoJsonLoad": "No JSON file loaded",
@@ -55,8 +53,12 @@
   "DragJSONFileHere": "Drag a JSON file here",
   "OrUseButton": "or use the button",
   "EditJSONManually": "Edit JSON manually",
+  "ChangesSaved": "Changes saved",
+  "JsonUpdatedSuccessfully": "JSON updated successfully",
   "JSONSourceFormat": "JSON source format",
   "Next": "Next",
+  "NoJsonSchemaSelected" : "No JSON schema selected",
+  "PleaseSelectJsonSchema" : "Please select a JSON schema to continue",
 
   "ForgotPassword": "Forgot Password",
   "ResetPassword": "Reset Password",
@@ -107,6 +109,19 @@
   "Total": "Total",
   "ErrorLoadingConversions": "Error loading conversions",
 
+  "ConversionDeletedSuccessfully": "Conversion deleted successfully",
+  "FailedToDeleteConversion": "Failed to delete conversion",
+  "OutputContentUpdatedSuccessfully": "Output content updated successfully",
+  "FailedToChangeOutput": "Failed to change output",
+  "FailedToGetConversionDetails": "Failed to get conversion details",
+  "FailedToGetAllConversions": "Failed to get all conversions",
+  "PleaseEnterJSONTextToConvert": "Please enter JSON text to convert.",
+  "PleaseSelectFHIRVersion": "Please select a FHIR version.",
+  "PleaseSelectResource": "Please select a resource",
+  "PleaseSelectOutputFormat": "Please select an output format",
+  "ConversionSuccessful": "Conversion successful",
+  "ConversionSuccessMessage": "The JSON has been successfully converted to FHIR format.",
+  "ConversionFailed": "Conversion failed",
 
   "ConversionDetails": "Conversion Details",
   "Property": "Property",
@@ -120,10 +135,26 @@
   "OutputContentNotAvailableMessage": "The output content is not available for this conversion.",
   "Input": "Input",
   "Output": "Output",
+  "EditOutput": "Edit Output",
+  "SaveChanges": "Save Changes",
+  "Return": "Return",
+  "DeleteConversion": "Delete Conversion",
+  "CancelChanges": "Cancel Changes",
+
 
   "Users": "Users",
   "Role": "Role",
-  "ChangeRole": "Change Role"
+  "ChangeRole": "Change Role",
 
+  "Statistics": "Statistics",
+  "TotalConversions": "Total Conversions",
+  "ConversionsByUser": "Conversions by User",
+  "ResourceDistribution": "Resource Distribution",
+  "ConversionsLast30Days": "Conversions in the last 30 days",
+
+
+  "FailedToGetUsers": "Failed to get users.",
+  "UserRoleChangedSuccessfully": "User role changed successfully",
+  "Success": "Success"
 
 }
