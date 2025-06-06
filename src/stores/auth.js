@@ -201,7 +201,7 @@ export const useAuthStore = defineStore("auth", () => {
                 );
                 return false;
             }
-        }, 1000 * 60 * 1); // Repete a cada 45 minutos
+        }, 1000 * 60 * 45); // Repete a cada 45 minutos
     };
 
     const restoreToken = async function () {

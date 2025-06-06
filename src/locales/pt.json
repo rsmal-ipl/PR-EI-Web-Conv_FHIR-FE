@@ -54,8 +54,12 @@
   "DragJSONFileHere": "Arraste para aqui um ficheiro JSON",
   "OrUseButton": "ou utilize o botão",
   "EditJSONManually": "Editar JSON manualmente",
+  "ChangesSaved": "Alterações guardadas",
+  "JsonUpdatedSuccessfully": "JSON atualizado com sucesso",
   "JSONSourceFormat": "Formato JSON de origem ",
   "Next": "Seguinte",
+  "NoJsonSchemaSelected" : "Nenhum esquema JSON selecionado",
+  "PleaseSelectJsonSchema" : "Por favor, selecione um esquema JSON para continuar",
 
   "JSONPreview": "Pré-visualização JSON",
   "Close": "Fechar",
@@ -97,6 +101,20 @@
   "Total": "Total",
   "ErrorLoadingConversions": "Erro ao carregar conversões",
 
+  "ConversionDeletedSuccessfully": "Conversão eliminada com sucesso!",
+  "FailedToDeleteConversion": "Falha ao eliminar a conversão!",
+  "OutputContentUpdatedSuccessfully": "Conteúdo de saída atualizado com sucesso!",
+  "FailedToChangeOutput": "Falha ao alterar o conteúdo de saída",
+  "FailedToGetConversionDetails": "Falha ao obter detalhes da conversão",
+  "FailedToGetAllConversions": "Falha ao obter todas as conversões",
+  "PleaseEnterJSONTextToConvert": "Por favor, insira o texto JSON a converter",
+  "PleaseSelectFHIRVersion": "Por favor, selecione a versão FHIR",
+  "PleaseSelectResource": "Por favor, selecione um recurso",
+  "PleaseSelectOutputFormat": "Por favor, selecione o formato de saída",
+  "ConversionSuccessful": "Conversão realizada com sucesso!",
+  "ConversionSuccessMessage": "O JSON foi convertido com sucesso para o formato FHIR.",
+  "ConversionFailed": "Falha na conversão.",
+
   "ConversionDetails": "Detalhes da conversão",
   "Property": "Propriedade",
   "Value": "Valor",
@@ -123,5 +141,9 @@
   "TotalConversions": "Total de conversões",
   "ConversionsByUser": "Conversões por utilizador",
   "ResourceDistribution": "Distribuição de Recursos",
-  "ConversionsLast30Days": "Conversões nos últimos 30 dias"
+  "ConversionsLast30Days": "Conversões nos últimos 30 dias",
+
+  "FailedToGetUsers": "Erro ao obter utilizadores.",
+  "UserRoleChangedSuccessfully": "Erro ao alterar o cargo do utilizador.",
+  "Success": "Sucesso"
 }

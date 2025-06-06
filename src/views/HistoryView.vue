@@ -86,7 +86,7 @@ onMounted(() => {
         <PageHeader :title="t('ConversionHistory')" />
 
         <div class="grid md:grid-cols-2 gap-4 w-full max-w-4xl my-6 items-end">
-            <div class="flex gap-2" v-if="filters.showAll && storeAuth.user?.roles?.includes('Admin')">
+            <div class="flex gap-2" v-if="filters.showAll && (storeAuth.user?.roles?.includes('Admin') || storeAuth.user?.roles?.includes('Owner'))">
                 <Input v-model="filters.userName" :placeholder="t('Username')"
                     class="font-semibold !placeholder-gray-500" />
                 <Button v-if="filters.userName" @click="filters.userName = ''" class="w-fit p-3">X</Button>
@@ -121,8 +121,8 @@ onMounted(() => {
                 </div>
             </div>
         </div>
-        <div class="flex items-center justify-center space-x-2 mb-5" v-if="storeAuth?.user?.roles.includes('Admin')">
-            <Checkbox id="showAll" v-model="filters.showAll" v-if="storeAuth.user?.roles?.includes('Admin')" />
+        <div class="flex items-center justify-center space-x-2 mb-5" v-if="storeAuth.user?.roles?.includes('Admin') || storeAuth.user?.roles?.includes('Owner')">
+            <Checkbox id="showAll" v-model="filters.showAll" v-if="storeAuth.user?.roles?.includes('Admin') || storeAuth.user?.roles?.includes('Owner')" />
             <Label for="showAll"
                 class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                 {{ t('ShowAllConversions') }}
@@ -135,7 +135,7 @@ onMounted(() => {
                     class="min-w-[900px] text-sm mx-auto text-left border text-center bg-white dark:bg-darkSecondary dark:text-white">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
-                            <th class="py-3 sm:px-6" v-if="storeAuth.user?.roles?.includes('Admin') && filters.showAll">
+                            <th class="py-3 sm:px-6" v-if="storeAuth.user?.roles?.includes('Admin') || storeAuth.user?.roles?.includes('Owner') && filters.showAll">
                                 {{ t('User') }}</th>
                             <th class="py-3 sm:px-6">{{ t('ConversionDate') }}</th>
                             <th class="py-3 sm:px-6">{{ t('Resource') }}</th>
@@ -148,7 +148,7 @@ onMounted(() => {
                     <tbody>
                         <tr v-for="conv in conversions" :key="conv.id"
                             class="bg-white dark:bg-darkSecondary dark:text-white border-b">
-                            <td class="py-4 sm:px-2" v-if="storeAuth.user?.roles?.includes('Admin') && filters.showAll">
+                            <td class="py-4 sm:px-2" v-if="storeAuth.user?.roles?.includes('Admin') || storeAuth.user?.roles?.includes('Owner') && filters.showAll">
                                 {{ conv.userName }}</td>
                             <td class="py-4 sm:px-2">{{ new Date(conv.createdAtUtc).toLocaleString() }}</td>
                             <td class="py-4 sm:px-2">{{ conv.resource }}</td>
