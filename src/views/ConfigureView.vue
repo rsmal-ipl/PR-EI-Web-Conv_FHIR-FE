@@ -11,9 +11,6 @@ import SelectForm from '@/components/common/SelectForm.vue';
 import PageHeader from '@/components/PageHeader.vue'
 import { useI18n } from 'vue-i18n'
 import RadioGroupForm from '@/components/common/RadioGroupForm.vue'
-import Label from '@/components/ui/label/Label.vue';
-import Checkbox from '@/components/ui/checkbox/Checkbox.vue';
-import Input from '@/components/ui/input/Input.vue';
 
 const alertDialog = inject('alertDialog')
 
@@ -21,7 +18,6 @@ const { t } = useI18n()
 const router = useRouter()
 const storeAuth = useAuthStore()
 const storeConvert = useConvertStore()
-const sendToFHIRServer = ref(false)
 
 const showModal = ref(false)
 
@@ -75,16 +71,6 @@ onMounted(() => {
 
       <p class="block font-medium mt-3 mb-2 text-gray-900 dark:text-white">{{ t('SelectOutputFormat') }}</p>
       <RadioGroupForm v-model="storeConvert.selectedOutputFormat" :options="storeConvert.options" defaultValue="JSON" name="outputFormat"/>
-
-      <div class="mt-5 flex items-center gap-2">
-        <Checkbox id="showAll" v-model="sendToFHIRServer"/>
-        <Label for="showAll" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-            {{t('SendOutputToFHIRServer')}}
-        </Label>
-      </div>
-
-      <p class="block font-medium mt-3 mb-2 text-gray-900 dark:text-white" v-if="sendToFHIRServer">{{ t('FHIRServerIP') }}</p>
-      <Input v-if="sendToFHIRServer" v-model="storeConvert.FHIRServerIP" class="w-full"/>
 
       <div class="flex flex-wrap sm:flex-nowrap gap-2 mt-5">
         <Button @click="preview" class="w-full mb-3">{{ t('Previous') }}</Button>

@@ -201,7 +201,7 @@ export const useAuthStore = defineStore("auth", () => {
                 );
                 return false;
             }
-        }, 1000 * 60 * 45); // Repete a cada 45 minutos
+        }, 1000 * 60 * 30); // Repete a cada 30 minutos
     };
 
     const restoreToken = async function () {
@@ -241,7 +241,6 @@ export const useAuthStore = defineStore("auth", () => {
             })
             return true;
         } catch (e) {
-            console.log(e.response.data)    
             storeError.setErrorMessages(e.response.data, e.response.data.errors, e.response.status, t("ResetPasswordError"))
             return false;
         }

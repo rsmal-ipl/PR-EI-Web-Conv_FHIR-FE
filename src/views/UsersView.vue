@@ -34,7 +34,6 @@ const loadUsers = async () => {
       page,
       pageSize
     });
-    console.log(data);
     users.value = data.data;
     Object.assign(pagination.value, data);
   } catch (e) {
@@ -53,7 +52,6 @@ const changePage = (p) => {
 const changeRole = async (userId, role) => {
   try {
     await storeUser.changeRole(userId, role);
-    console.log('Role changed');
     await loadUsers();
   } catch (e) {
     console.error('Error changing role:', e);

@@ -19,7 +19,6 @@ export const useUsersStore = defineStore('users', () => {
     ]
 
     const getAllUsers = async (params = {}) => {
-        console.log('params', params)
         try {
             const response = await axios.get('/user', { params });
             return response.data;

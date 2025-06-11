@@ -62,7 +62,7 @@ const previewInput = () => {
 }
 
 const previewOutput = () => {
-    if (!conversion.value.outputContent) {
+    if (!conversion.value.convertedContent) {
         toast({
             title: t('OutputContentNotAvailableTitle'),
             description: t('OutputContentNotAvailableMessage'),
@@ -71,7 +71,7 @@ const previewOutput = () => {
         return
     }
     modalTitle.value = t('Output')
-    modalContent.value = conversion.value.outputContent
+    modalContent.value = conversion.value.convertedContent
     showModal.value = true
 }
 
@@ -92,7 +92,8 @@ watch(copyOutputContent, () => {
 })
 
 const edit = () => {
-    if (!conversion.value.originalContent) { //Mudar para outputContent
+    console.log("Edit output clicked")
+    if (!conversion.value.convertedContent) {
         toast({
             title: t('OutputContentNotAvailableTitle'),
             description: t('OutputContentNotAvailableMessage'),
@@ -100,14 +101,15 @@ const edit = () => {
         })
         return
     }
+
     isEditing.value = !isEditing.value
-    copyOutputContent.value = conversion.value.originalContent //Mudar para outputContent
+    const content = conversion.value.convertedContent
+    copyOutputContent.value = typeof content === 'object' ? JSON.stringify(content, null, 2) : content
     nextTick(() => autoResize())
 }
-
 const closeEditModal = () => {
     isEditing.value = false
-    copyOutputContent.value = conversion.value.originalContent
+    copyOutputContent.value = conversion.value.convertedContent
 }
 
 const saveChangesConfirmed = async () => {
@@ -249,7 +251,7 @@ onMounted(() => {
       :title="t('EditOutput')"
       v-model="copyOutputContent"
       @save="saveChanges"
-      @close="closeEditModal"
+      @close="cancelChanges"
     />
 
     <PreviewJson :isVisible="showModal" :json="modalContent" @close="showModal = false" :title="modalTitle" />

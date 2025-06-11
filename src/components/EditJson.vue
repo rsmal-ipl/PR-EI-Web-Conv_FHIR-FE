@@ -31,7 +31,7 @@ watch(localContent, (val) => {
       <h1 class="text-xl font-bold mb-4">{{ title }}</h1>
       <textarea
         v-model="localContent"
-        rows="12"
+        rows="25"
         class="w-full bg-gray-100 dark:bg-gray-800 p-4 text-sm max-h-[60vh] overflow-auto rounded resize-none text-black dark:text-white"
       ></textarea>
       <div class="flex justify-end gap-2 mt-4">

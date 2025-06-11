@@ -108,6 +108,7 @@
   "Page": "Page",
   "Total": "Total",
   "ErrorLoadingConversions": "Error loading conversions",
+  "Actions": "Actions",
 
   "ConversionDeletedSuccessfully": "Conversion deleted successfully",
   "FailedToDeleteConversion": "Failed to delete conversion",
@@ -156,5 +157,4 @@
   "FailedToGetUsers": "Failed to get users.",
   "UserRoleChangedSuccessfully": "User role changed successfully",
   "Success": "Success"
-
 }

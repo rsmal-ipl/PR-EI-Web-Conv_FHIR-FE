@@ -32,7 +32,7 @@ const logout = () => {
       <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <div class="flex items-center space-x-3 rtl:space-x-reverse sm:w-64 mb-1">
             <span class="text-2xl">⚙️</span>
-            <span class="sm:block text-lg font-semibold ">JSON to FHIR</span>
+            <span class="sm:block text-lg font-semibold hidden sm:block">JSON to FHIR</span>
         </div>
     
         <div class=" ml-5 flex items-center md:order-2 space-x-3 md:space-x-0 justify-end rtl:space-x-reverse w-fit ">
