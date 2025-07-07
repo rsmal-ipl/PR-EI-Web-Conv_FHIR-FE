@@ -34,11 +34,10 @@ export const useConvertStore = defineStore('convert', () => {
 
     const resources = [
         { value: 'Patient', label: 'Patient' },
-        { value: 'DiagnosticReport', label: 'Diagnostic Report' },
+        { value: 'DiagnosticReport', label: 'DiagnosticReport' },
         { value: 'Encounter', label: 'Encounter' },
-        { value: 'Boundle', label: 'Boundle' },
-    ]
-
+        { value: 'Bundle', label: 'Bundle' },
+    ] 
     const options = [
         { value: 'JSON', label: 'JSON' },
         { value: 'XML', label: 'XML' }
