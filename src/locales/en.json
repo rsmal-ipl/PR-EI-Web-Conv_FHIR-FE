@@ -152,7 +152,15 @@
   "ConversionsByUser": "Conversions by User",
   "ResourceDistribution": "Resource Distribution",
   "ConversionsLast30Days": "Conversions in the last 30 days",
-
+  "AgeFrequency": "Age Frequency",
+  "DateFrequency": "Date Frequency",
+  "PacientFrequency": "Pacient Frequency",
+  "StatusRatio": "Status Ratio",
+  "ExamType": "Exam Type",
+  "StatusRatioFinal": "Final",
+  "StatusRatioPreliminary": "Preliminary",
+  "StatusRatioTotal": "Total",
+  "UniquePacients": "Unique Pacients",
 
   "FailedToGetUsers": "Failed to get users.",
   "UserRoleChangedSuccessfully": "User role changed successfully",
