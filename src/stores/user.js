@@ -53,9 +53,23 @@ export const useUsersStore = defineStore('users', () => {
         }
     }
 
+    const deleteUser = async (userId) => {
+        try {
+            await axios.delete(`/user/${userId}`);
+            toast({
+                title: t('Success'),
+                description: t('UserDeletedSuccessfully'),
+                variant: 'default',
+            })
+        } catch (e) {
+            storeError.setErrorMessages(e.response.data, e.response.data.errors, e.response.status, "Error");
+        }
+    }
+
     return {
         roles,
         getAllUsers,
         changeRole,
+        deleteUser
     }
 })

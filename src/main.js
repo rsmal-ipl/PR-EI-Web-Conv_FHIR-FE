@@ -19,7 +19,7 @@ app.use(vue3GoogleLogin, {
 
 const apiDomain = import.meta.env.VITE_API_URL
 
-axios.defaults.baseURL = `http://${apiDomain}/api`
+axios.defaults.baseURL = `${apiDomain}/api`
 
 app.use(i18n)
 app.use(createPinia())

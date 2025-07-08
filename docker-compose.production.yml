@@ -1,0 +1,15 @@
+services:
+  pi_frontend:
+    container_name: pi_frontend_production
+    build:
+      context: .
+      target: ${TARGET:-production}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/nginx/certs:/etc/nginx/certs:ro
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - .env.production

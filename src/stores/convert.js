@@ -40,7 +40,7 @@ export const useConvertStore = defineStore('convert', () => {
     ] 
     const options = [
         { value: 'JSON', label: 'JSON' },
-        { value: 'XML', label: 'XML'}
+        // { value: 'XML', label: 'XML'}
     ]
 
     const deleteConversion = async (id) => {
