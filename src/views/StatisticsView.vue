@@ -104,30 +104,30 @@ onMounted(() => {
         <div v-if="statistics?.totalConversions != 0" class="w-full p-4 rounded">
 
 
-            <h1 class="text-lg font-bold mt-4 text-center dark:text-white">{{ t('ConversionsLast30Days') }}</h1>
+            <h1 v-if="statistics?.charts" class="text-lg font-bold mt-4 text-center dark:text-white">{{ t('ConversionsLast30Days') }}</h1>
 
             <BarChart v-if="statistics?.charts" :labels="statistics.charts.conversionsPerDay.labels"
                 :values="statistics.charts.conversionsPerDay.values"
                 :colors="barColors.slice(0, statistics.charts.conversionsPerDay.labels.length)" :maxWidth="'700px'"
                 :height="'300px'" :chartTitle="t('TotalConversions')" />
                 
-            <h1 class="text-lg font-bold text-center mt-5 dark:text-white">{{ t('ResourceDistribution') }}</h1>
+            <h1 v-if="statistics?.charts" class="text-lg font-bold text-center mt-5 dark:text-white">{{ t('ResourceDistribution') }}</h1>
             <BarChart v-if="statistics?.charts" :labels="statistics.charts.resourceDistribution.labels"
                 :values="statistics.charts.resourceDistribution.values"
                 :colors="pieResourceColors.slice(0, statistics.charts.resourceDistribution.labels.length)"
                 :maxWidth="'700px'" :height="'400px'" :chartTitle="t('TotalConversions')" />
 
             <div class="sm:flex flex-wrap justify-center items-center mt-8 w-full">
-                <div>
+                <div v-if="statistics?.charts">
                     <h1 class="text-lg font-bold text-center mt-5 dark:text-white">{{ t('FHIRVersion') }}</h1>
-                    <PieChart v-if="statistics?.charts" :labels="statistics.charts.fhirVersionDistribution.labels"
+                    <PieChart :labels="statistics.charts.fhirVersionDistribution.labels"
                         :values="statistics.charts.fhirVersionDistribution.values"
                         :colors="pieFhirColors.slice(0, statistics.charts.fhirVersionDistribution.labels.length)"
                         :maxWidth="'400px'" :height="'300px'" />
                 </div>
-                <div>
+                <div v-if="statistics?.charts">
                     <h1 class="text-lg font-bold text-center mt-5 dark:text-white">{{ t('JSONSourceFormat') }}</h1>
-                    <PieChart v-if="statistics?.charts" :labels="statistics.charts.jsonSourceFormatDistribution.labels"
+                    <PieChart :labels="statistics.charts.jsonSourceFormatDistribution.labels"
                         :values="statistics.charts.jsonSourceFormatDistribution.values"
                         :colors="pieSourceColors.slice(0, statistics.charts.jsonSourceFormatDistribution.labels.length)"
                         :maxWidth="'400px'" :height="'300px'" />
