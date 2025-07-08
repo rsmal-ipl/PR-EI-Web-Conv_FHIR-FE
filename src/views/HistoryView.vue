@@ -19,9 +19,10 @@ const router = useRouter();
 const storeAuth = useAuthStore();
 
 const filters = ref({
-    userName: '',
+    userEmail: '',
     outputFormat: '',
     fhirVersion: '',
+    jsonSourceFormat: '',
     resource: '',
     dateFrom: '',
     dateTo: '',
@@ -87,9 +88,9 @@ onMounted(() => {
 
         <div class="grid md:grid-cols-2 gap-4 w-full max-w-4xl my-6 items-end">
             <div class="flex gap-2" v-if="filters.showAll && (storeAuth.user?.roles?.includes('Admin') || storeAuth.user?.roles?.includes('Owner'))">
-                <Input v-model="filters.userName" :placeholder="t('Username')"
+                <Input v-model="filters.userEmail" :placeholder="t('Email')" 
                     class="font-semibold !placeholder-gray-500" />
-                <Button v-if="filters.userName" @click="filters.userName = ''" class="w-fit p-3">X</Button>
+                <Button v-if="filters.userEmail" @click="filters.userEmail = ''" class="w-fit p-3">X</Button>
             </div>
             <div class="flex gap-2">
                 <SelectForm v-model="filters.outputFormat" :items="storeConvert.options"
@@ -100,6 +101,11 @@ onMounted(() => {
                 <SelectForm v-model="filters.fhirVersion" :items="storeConvert.FHIRversion"
                     :placeholder="t('FHIRVersion')" class="w-full" />
                 <Button v-if="filters.fhirVersion" @click="filters.fhirVersion = ''" class="w-fit p-3">X</Button>
+            </div>
+            <div class="flex gap-2">
+                <SelectForm v-model="filters.jsonSourceFormat" :items="storeConvert.jsonSchema"
+                    :placeholder="t('JSONSourceFormat')" class="w-full" />
+                <Button v-if="filters.jsonSourceFormat" @click="filters.jsonSourceFormat = ''" class="w-fit p-3">X</Button>
             </div>
             <div class="flex gap-2">
                 <SelectForm v-model="filters.resource" :items="storeConvert.resources" :placeholder="t('Resource')"
@@ -142,6 +148,7 @@ onMounted(() => {
                             <th class="py-3 sm:px-6">{{ t('FHIRVersion') }}</th>
                             <th class="py-3 sm:px-6">{{ t('JSONSourceFormat') }}</th>
                             <th class="py-3 sm:px-6">{{ t('OutputFormat') }}</th>
+                            <th class="py-3 sm:px-6">{{ t('Success') }}</th>
                             <th class="py-3 sm:px-6">{{ t('Actions') }}</th>
                         </tr>
                     </thead>
@@ -149,12 +156,18 @@ onMounted(() => {
                         <tr v-for="conv in conversions" :key="conv.id"
                             class="bg-white dark:bg-darkSecondary dark:text-white border-b">
                             <td class="py-4 sm:px-2" v-if="storeAuth.user?.roles?.includes('Admin') || storeAuth.user?.roles?.includes('Owner') && filters.showAll">
-                                {{ conv.userName }}</td>
+                                {{ conv.userEmail }}</td>
                             <td class="py-4 sm:px-2">{{ new Date(conv.createdAtUtc).toLocaleString() }}</td>
                             <td class="py-4 sm:px-2">{{ conv.resource }}</td>
                             <td class="py-4 sm:px-2">{{ conv.fhirVersion }}</td>
                             <td class="py-4 sm:px-2">{{ conv.jsonSourceFormat }}</td>
                             <td class="py-4 sm:px-2">{{ conv.outputFormat }}</td>
+                            <td class="py-4 sm:px-2">
+                                <span
+                                    :class="conv.isSuccess ? 'bg-green-500' : 'bg-red-500'"
+                                    class="inline-block w-5 h-5 rounded-full"
+                                ></span>
+                            </td>
                             <td class="py-4 sm:px-2 cursor-pointer flex justify-center items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" @click="router.push({ name: 'Conversion', params: { id: conv.id } })"
                                     stroke-width="1.5" stroke="currentColor" class="size-6 mx-auto">

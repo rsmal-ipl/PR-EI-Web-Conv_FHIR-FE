@@ -22,14 +22,14 @@ export const useConvertStore = defineStore('convert', () => {
 
     const jsonSchema = [
         { value: 'HL7v2', label: 'HL7 v2' },
-        { value: 'CDA', label: 'CDA' },
-        { value: 'Custom', label: 'Custom' },
+        // { value: 'CDA', label: 'CDA' },
+        // { value: 'Custom', label: 'Custom' },
     ]
 
     const FHIRversion = [
         { value: 'FHIRR4', label: 'FHIR R4' },
-        { value: 'STU3', label: 'STU3' },
-        { value: 'Other', label: 'Other Version' },
+        // { value: 'STU3', label: 'STU3' },
+        // { value: 'Other', label: 'Other Version' },
     ]
 
     const resources = [
@@ -40,7 +40,7 @@ export const useConvertStore = defineStore('convert', () => {
     ] 
     const options = [
         { value: 'JSON', label: 'JSON' },
-        { value: 'XML', label: 'XML' }
+        { value: 'XML', label: 'XML'}
     ]
 
     const deleteConversion = async (id) => {

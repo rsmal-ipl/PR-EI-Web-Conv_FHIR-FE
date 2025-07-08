@@ -10,12 +10,15 @@ import PreviewJson from '@/components/PreviewJson.vue'
 import SelectForm from '@/components/common/SelectForm.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import { useI18n } from 'vue-i18n'
+import ErrorMessage from '@/components/common/ErrorMessage.vue'
+import { useErrorStore } from '@/stores/error.js'
 
 const { t } = useI18n()
 const router = useRouter()
 const storeAuth = useAuthStore()
 const storeConvert = useConvertStore()
 const alertDialog = inject('alertDialog')
+const storeError = useErrorStore()
 
 const jsonText = ref('')
 const showModal = ref(false)
@@ -185,9 +188,14 @@ onMounted(() => {
         <p class="text-sm text-gray-500 dark:text-gray-400">({{ t('OrUseButton') }})</p>
       </div>
 
+      <ErrorMessage :errorMessage="storeError.fieldMessage('Content')"></ErrorMessage>
+
       <p class="block font-medium my-3 text-gray-900 dark:text-white">{{ t('JSONSourceFormat') }}</p>
+
       <SelectForm v-model="storeConvert.selectedJSONSchema" :items="storeConvert.jsonSchema" placeholder="&nbsp;"
         class="w-full bg-red-200" />
+
+      <ErrorMessage :errorMessage="storeError.fieldMessage('JsonSourceFormat')"></ErrorMessage>
 
       <div class="flex flex-wrap sm:flex-nowrap gap-2 mt-5">
         <Button v-if="!isEditing" @click="editJson" class="w-full mb-3">{{ t('EditJSONManually') }}</Button>

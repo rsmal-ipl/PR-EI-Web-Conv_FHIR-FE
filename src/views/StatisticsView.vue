@@ -26,8 +26,7 @@ const examsPerPatientData = computed(() => {
     const epp = globalStatistics.value?.exams_per_patient
     if (!epp) return []
 
-    const meanVal =
-        epp.mean ?? (epp.min + epp.q1 + epp.median + epp.q3 + epp.max) / 5
+    const meanVal = epp.mean ?? (epp.min + epp.q1 + epp.median + epp.q3 + epp.max) / 5
 
     return [
         {
@@ -171,12 +170,11 @@ onMounted(() => {
             <h1 class="text-lg font-bold text-center dark:text-white">{{ t('PacientFrequency') }}</h1>
             <BoxPlot v-if="examsPerPatientData.length" :chartData="examsPerPatientData"
                 :chartTitle="t('PacientFrequency')" />
-
         </div>
 
         <div class="mt-12 w-full max-w-4xl p-4 rounded">
             <h1 class="text-lg font-bold text-center mb-4 dark:text-white">{{ t('StatusRatio') }}</h1>
-            <div class="flex justify-around text-center">
+            <div class="flex justify-center gap-10 text-center">
                 <div class="bg-white shadow-md rounded-lg p-4">
                     <h2 class="text-xl font-semibold text-center">{{ t('StatusRatioFinal') }}</h2>
                     <p class="text-2xl font-bold text-center mt-2">{{ globalStatistics?.status_ratio?.final ?? 0 }}</p>

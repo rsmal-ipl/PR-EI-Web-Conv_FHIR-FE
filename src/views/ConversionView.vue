@@ -188,13 +188,15 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col justify-center items-center py-12 px-5 lg:px-8 max-w-3xl mx-auto">
+  <div class="flex flex-col justify-center items-center py-12 px-5lg:px-8 max-w-3xl mx-auto">
     <PageHeader :title="t('ConversionDetails')" />
 
     <div class="flex flex-wrap sm:flex-nowrap justify-center gap-2 mt-5 sm:mb-0 max-w-sm w-full">
       <Button @click="previewInput" class="w-full mx-auto">{{ t('PreviewInput') }}</Button>
       <Button @click="previewOutput" class="w-full mx-auto">{{ t('PreviewOutput') }}</Button>
     </div>
+
+    <h1 class="mt-5 font-bold" v-if="conversion?.message" :class="{ 'text-red-500': conversion?.isSuccess == false }">{{ conversion?.message }}</h1>
 
     <div class="overflow-x-auto relative rounded-lg mt-5 w-full">
       <table class="mx-auto text-sm text-left border text-center bg-white dark:bg-darkSecondary dark:text-white">

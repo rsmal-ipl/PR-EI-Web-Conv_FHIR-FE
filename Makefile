@@ -3,7 +3,7 @@
 TARGET ?= development
 
 build:
-	docker-compose build --target $(TARGET)
+	docker-compose build --no-cache
 
 up:
 	docker-compose up -d

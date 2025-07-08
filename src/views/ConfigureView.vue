@@ -11,6 +11,8 @@ import SelectForm from '@/components/common/SelectForm.vue';
 import PageHeader from '@/components/PageHeader.vue'
 import { useI18n } from 'vue-i18n'
 import RadioGroupForm from '@/components/common/RadioGroupForm.vue'
+import ErrorMessage from '@/components/common/ErrorMessage.vue'
+import { useErrorStore } from '@/stores/error.js'
 
 const alertDialog = inject('alertDialog')
 
@@ -18,6 +20,8 @@ const { t } = useI18n()
 const router = useRouter()
 const storeAuth = useAuthStore()
 const storeConvert = useConvertStore()
+const storeError = useErrorStore()
+
 
 const showModal = ref(false)
 
@@ -65,12 +69,15 @@ onMounted(() => {
 
       <p class="block font-medium my-3 mb-2 text-gray-900 dark:text-white">{{ t('SelectResource') }}</p>
       <ComboboxSelect v-model="storeConvert.selectedResource" :items="storeConvert.resources" placeholder="&nbsp;" class="w-full mb-5 !dark:text-white !text-black"/>
+      <ErrorMessage :errorMessage="storeError.fieldMessage('Resource')"></ErrorMessage>
 
       <p class="block font-medium my-3 text-gray-900 dark:text-white">{{ t('SelectFHIRVersion') }}</p>
       <SelectForm v-model="storeConvert.selectedFHIRVersion" :items="storeConvert.FHIRversion" placeholder="&nbsp;" class="w-full"/>
+      <ErrorMessage :errorMessage="storeError.fieldMessage('FHIRVersion')"></ErrorMessage>
 
       <p class="block font-medium mt-3 mb-2 text-gray-900 dark:text-white">{{ t('SelectOutputFormat') }}</p>
       <RadioGroupForm v-model="storeConvert.selectedOutputFormat" :options="storeConvert.options" defaultValue="JSON" name="outputFormat"/>
+      <ErrorMessage :errorMessage="storeError.fieldMessage('OutputFormat')"></ErrorMessage>
 
       <div class="flex flex-wrap sm:flex-nowrap gap-2 mt-5">
         <Button @click="preview" class="w-full mb-3">{{ t('Previous') }}</Button>
