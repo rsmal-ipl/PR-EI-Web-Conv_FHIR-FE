@@ -101,102 +101,114 @@ onMounted(() => {
             </div>
         </div>
 
-        <h1 class="text-lg font-bold mt-4 text-center dark:text-white">{{ t('ConversionsLast30Days') }}</h1>
+        <div v-if="statistics?.totalConversions != 0" class="w-full p-4 rounded">
 
-        <BarChart v-if="statistics?.charts" :labels="statistics.charts.conversionsPerDay.labels"
-            :values="statistics.charts.conversionsPerDay.values"
-            :colors="barColors.slice(0, statistics.charts.conversionsPerDay.labels.length)" :maxWidth="'700px'"
-            :height="'300px'" :chartTitle="t('TotalConversions')" />
 
-        <h1 class="text-lg font-bold text-center mt-5 dark:text-white">{{ t('ResourceDistribution') }}</h1>
-        <BarChart v-if="statistics?.charts" :labels="statistics.charts.resourceDistribution.labels"
-            :values="statistics.charts.resourceDistribution.values"
-            :colors="pieResourceColors.slice(0, statistics.charts.resourceDistribution.labels.length)"
-            :maxWidth="'700px'" :height="'400px'" :chartTitle="t('TotalConversions')" />
+            <h1 class="text-lg font-bold mt-4 text-center dark:text-white">{{ t('ConversionsLast30Days') }}</h1>
 
-        <div class="sm:flex flex-wrap justify-center items-center mt-8 w-full">
-            <div>
-                <h1 class="text-lg font-bold text-center mt-5 dark:text-white">{{ t('FHIRVersion') }}</h1>
-                <PieChart v-if="statistics?.charts" :labels="statistics.charts.fhirVersionDistribution.labels"
-                    :values="statistics.charts.fhirVersionDistribution.values"
-                    :colors="pieFhirColors.slice(0, statistics.charts.fhirVersionDistribution.labels.length)"
-                    :maxWidth="'400px'" :height="'300px'" />
-            </div>
-            <div>
-                <h1 class="text-lg font-bold text-center mt-5 dark:text-white">{{ t('JSONSourceFormat') }}</h1>
-                <PieChart v-if="statistics?.charts" :labels="statistics.charts.jsonSourceFormatDistribution.labels"
-                    :values="statistics.charts.jsonSourceFormatDistribution.values"
-                    :colors="pieSourceColors.slice(0, statistics.charts.jsonSourceFormatDistribution.labels.length)"
-                    :maxWidth="'400px'" :height="'300px'" />
-            </div>
-        </div>
+            <BarChart v-if="statistics?.charts" :labels="statistics.charts.conversionsPerDay.labels"
+                :values="statistics.charts.conversionsPerDay.values"
+                :colors="barColors.slice(0, statistics.charts.conversionsPerDay.labels.length)" :maxWidth="'700px'"
+                :height="'300px'" :chartTitle="t('TotalConversions')" />
+                
+            <h1 class="text-lg font-bold text-center mt-5 dark:text-white">{{ t('ResourceDistribution') }}</h1>
+            <BarChart v-if="statistics?.charts" :labels="statistics.charts.resourceDistribution.labels"
+                :values="statistics.charts.resourceDistribution.values"
+                :colors="pieResourceColors.slice(0, statistics.charts.resourceDistribution.labels.length)"
+                :maxWidth="'700px'" :height="'400px'" :chartTitle="t('TotalConversions')" />
 
-        <div class="flex flex-wrap justify-center items-center mt-5 w-full">
-            <div class="w-full" v-if="statistics?.charts">
-                <h1 class="text-lg font-bold text-center dark:text-white">{{ t('ConversionsByUser') }}</h1>
-                <BarChart v-if="statistics?.charts" :labels="statistics.charts.conversionsByUser.labels"
-                    :values="statistics.charts.conversionsByUser.values"
-                    :colors="userBarColors.slice(0, statistics.charts.conversionsByUser.labels.length)"
-                    :maxWidth="'700px'" :height="'300px'" :chartTitle="t('TotalConversions')" />
-            </div>
-        </div>
-
-        <div class="mt-12 w-full max-w-4xl">
-            <h1 class="text-lg font-bold text-center dark:text-white">{{ "AgeFrequency" }}</h1>
-            <BarChart v-if="globalStatistics?.ages?.frequency" :labels="Object.keys(globalStatistics.ages.frequency)"
-                :values="Object.values(globalStatistics.ages.frequency)"
-                :colors="barColors.slice(0, Object.keys(globalStatistics.ages.frequency).length)" :maxWidth="'700px'"
-                :height="'350px'" :chartTitle="t('AgeFrequency')" />
-        </div>
-
-        <div class="mt-12 w-full max-w-4xl">
-            <h1 class="text-lg font-bold text-center dark:text-white">{{ t('ExamType') }}</h1>
-            <PieChart v-if="globalStatistics?.exams?.counts" :labels="Object.keys(globalStatistics.exams.counts)"
-                :values="Object.values(globalStatistics.exams.counts)"
-                :colors="pieResourceColors.slice(0, Object.keys(globalStatistics.exams.counts).length)"
-                :maxWidth="'600px'" :height="'350px'" :chartTitle="t('ExamType')" />
-        </div>
-
-        <div class="mt-12 w-full max-w-4xl">
-            <h1 class="text-lg font-bold text-center dark:text-white">{{ t('DateFrequency') }}</h1>
-            <BarChart v-if="globalStatistics?.exams_by_date?.counts"
-                :labels="Object.keys(globalStatistics.exams_by_date.counts)"
-                :values="Object.values(globalStatistics.exams_by_date.counts)"
-                :colors="barColors.slice(0, Object.keys(globalStatistics.exams_by_date.counts).length)"
-                :maxWidth="'700px'" :height="'350px'" :chartTitle="t('DateFrequency')" />
-        </div>
-
-        <div class="mt-12 w-full max-w-4xl">
-            <h1 class="text-lg font-bold text-center dark:text-white">{{ t('PacientFrequency') }}</h1>
-            <BoxPlot v-if="examsPerPatientData.length" :chartData="examsPerPatientData"
-                :chartTitle="t('PacientFrequency')" />
-        </div>
-
-        <div class="mt-12 w-full max-w-4xl p-4 rounded">
-            <h1 class="text-lg font-bold text-center mb-4 dark:text-white">{{ t('StatusRatio') }}</h1>
-            <div class="flex justify-center gap-10 text-center">
-                <div class="bg-white shadow-md rounded-lg p-4">
-                    <h2 class="text-xl font-semibold text-center">{{ t('StatusRatioFinal') }}</h2>
-                    <p class="text-2xl font-bold text-center mt-2">{{ globalStatistics?.status_ratio?.final ?? 0 }}</p>
+            <div class="sm:flex flex-wrap justify-center items-center mt-8 w-full">
+                <div>
+                    <h1 class="text-lg font-bold text-center mt-5 dark:text-white">{{ t('FHIRVersion') }}</h1>
+                    <PieChart v-if="statistics?.charts" :labels="statistics.charts.fhirVersionDistribution.labels"
+                        :values="statistics.charts.fhirVersionDistribution.values"
+                        :colors="pieFhirColors.slice(0, statistics.charts.fhirVersionDistribution.labels.length)"
+                        :maxWidth="'400px'" :height="'300px'" />
                 </div>
-                <div class="bg-white shadow-md rounded-lg p-4">
-                    <h2 class="text-xl font-semibold text-center">{{ t('StatusRatioPreliminary') }}</h2>
-                    <p class="text-2xl font-bold text-center mt-2">{{ globalStatistics?.status_ratio?.preliminary ?? 0 }}</p>
-                </div>
-                <div class="bg-white shadow-md rounded-lg p-4">
-                    <h2 class="text-xl font-semibold text-center">{{ t('StatusRatioTotal') }}</h2>
-                    <p class="text-2xl font-bold text-center mt-2">{{ globalStatistics?.status_ratio?.total ?? 0 }}</p>
+                <div>
+                    <h1 class="text-lg font-bold text-center mt-5 dark:text-white">{{ t('JSONSourceFormat') }}</h1>
+                    <PieChart v-if="statistics?.charts" :labels="statistics.charts.jsonSourceFormatDistribution.labels"
+                        :values="statistics.charts.jsonSourceFormatDistribution.values"
+                        :colors="pieSourceColors.slice(0, statistics.charts.jsonSourceFormatDistribution.labels.length)"
+                        :maxWidth="'400px'" :height="'300px'" />
                 </div>
             </div>
-        </div>
 
-        <div class="flex flex-col justify-center items-center gap-4 mt-8">
-            <div class="flex flex-wrap justify-center items-center gap-4">
-                <div class="bg-white shadow-md rounded-lg p-4">
-                    <h2 class="text-xl font-semibold text-center">{{ t('UniquePacients') }}</h2>
-                    <p class="text-2xl font-bold text-center mt-2">{{ globalStatistics?.unique_patients ?? 0 }}</p>
+            <div class="sm:flex flex-wrap justify-center items-center mt-8 w-full">
+                <div class="flex flex-wrap justify-center items-center mt-5 w-full">
+                    <div class="w-full" v-if="statistics?.charts">
+                        <h1 class="text-lg font-bold text-center dark:text-white">{{ t('ConversionsByUser') }}</h1>
+                        <BarChart v-if="statistics?.charts" :labels="statistics.charts.conversionsByUser.labels"
+                            :values="statistics.charts.conversionsByUser.values"
+                            :colors="userBarColors.slice(0, statistics.charts.conversionsByUser.labels.length)"
+                            :maxWidth="'700px'" :height="'300px'" :chartTitle="t('TotalConversions')" />
+                    </div>
+                </div>
+
+                <div class="mt-12 w-full max-w-4xl" v-if="globalStatistics?.ages?.frequency">
+                    <h1 class="text-lg font-bold text-center dark:text-white">{{ t('AgeFrequency') }}</h1>
+                    <BarChart :labels="Object.keys(globalStatistics.ages.frequency)"
+                        :values="Object.values(globalStatistics.ages.frequency)"
+                        :colors="barColors.slice(0, Object.keys(globalStatistics.ages.frequency).length)"
+                        :maxWidth="'700px'" :height="'350px'" :chartTitle="t('AgeFrequency')" />
                 </div>
             </div>
+
+            <div class="mt-12 w-full max-w-4xl mx-auto" v-if="globalStatistics?.exams?.counts">
+                <h1 class="text-lg font-bold text-center dark:text-white">{{ t('ExamType') }}</h1>
+                <PieChart :labels="Object.keys(globalStatistics.exams.counts)"
+                    :values="Object.values(globalStatistics.exams.counts)"
+                    :colors="pieResourceColors.slice(0, Object.keys(globalStatistics.exams.counts).length)"
+                    :maxWidth="'600px'" :height="'350px'" :chartTitle="t('ExamType')" />
+            </div>
+
+            <div class="mt-12 w-full max-w-4xl mx-auto" v-if="globalStatistics?.exams_by_date?.counts">
+                <h1 class="text-lg font-bold text-center dark:text-white">{{ t('DateFrequency') }}</h1>
+                <BarChart :labels="Object.keys(globalStatistics.exams_by_date.counts)"
+                    :values="Object.values(globalStatistics.exams_by_date.counts)"
+                    :colors="barColors.slice(0, Object.keys(globalStatistics.exams_by_date.counts).length)"
+                    :maxWidth="'700px'" :height="'350px'" :chartTitle="t('DateFrequency')" />
+            </div>
+
+            <div class="mt-12 w-full max-w-4xl mx-auto" v-if="examsPerPatientData.length">
+                <h1 class="text-lg font-bold text-center dark:text-white">{{ t('PacientFrequency') }}</h1>
+                <BoxPlot :chartData="examsPerPatientData" :chartTitle="t('PacientFrequency')" />
+            </div>
+
+            <div class="mt-12 w-full max-w-4xl p-4 rounded mx-auto" v-if="globalStatistics?.status_ratio">
+                <h1 class="text-lg font-bold text-center mb-4 dark:text-white">{{ t('StatusRatio') }}</h1>
+                <div class="flex justify-center gap-10 text-center">
+                    <div class="bg-white shadow-md rounded-lg p-4">
+                        <h2 class="text-xl font-semibold text-center">{{ t('StatusRatioFinal') }}</h2>
+                        <p class="text-2xl font-bold text-center mt-2">{{ globalStatistics?.status_ratio?.final ?? 0 }}
+                        </p>
+                    </div>
+                    <div class="bg-white shadow-md rounded-lg p-4">
+                        <h2 class="text-xl font-semibold text-center">{{ t('StatusRatioPreliminary') }}</h2>
+                        <p class="text-2xl font-bold text-center mt-2">{{ globalStatistics?.status_ratio?.preliminary ??
+                            0 }}</p>
+                    </div>
+                    <div class="bg-white shadow-md rounded-lg p-4">
+                        <h2 class="text-xl font-semibold text-center">{{ t('StatusRatioTotal') }}</h2>
+                        <p class="text-2xl font-bold text-center mt-2">{{ globalStatistics?.status_ratio?.total ?? 0 }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col justify-center items-center gap-4 mt-8" v-if="globalStatistics?.unique_patients">
+                <div class="flex flex-wrap justify-center items-center gap-4">
+                    <div class="bg-white shadow-md rounded-lg p-4">
+                        <h2 class="text-xl font-semibold text-center">{{ t('UniquePacients') }}</h2>
+                        <p class="text-2xl font-bold text-center mt-2">{{ globalStatistics?.unique_patients ?? 0 }}</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div v-else class="text-red-500 text-2xl font-bold mt-8">
+            <h1>{{ t('NoStatistics') }}</h1>
         </div>
 
     </div>

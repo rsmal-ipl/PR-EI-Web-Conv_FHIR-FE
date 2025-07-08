@@ -159,6 +159,7 @@
   "StatusRatioPreliminary": "Preliminar",
   "StatusRatioTotal": "Total",
   "UniquePacients": "Pacientes Únicos",
+  "NoStatistics": "Nenhuma estatística disponível",
 
   "FailedToGetUsers": "Erro ao obter utilizadores.",
   "UserRoleChangedSuccessfully": "Função do utilizador alterada com sucesso",
