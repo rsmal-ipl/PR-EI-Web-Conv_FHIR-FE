@@ -15,6 +15,7 @@ const { t } = useI18n()
 const router = useRouter()
 const statistics = ref(null)
 const globalStatistics = ref(null)
+const noGlobalStatistics = ref(false)
 
 const barColors = ['#0097A7'];
 const pieResourceColors = ['#1A237E'];
@@ -82,6 +83,7 @@ onMounted(() => {
     axios.get('/Convert/stats').then(response => {
         statistics.value = response.data.other;
         globalStatistics.value = response.data.global;
+        noGlobalStatistics.value = response.data.noGlobalStatistics ?? false;
     }).catch(error => {
         console.error('Error fetching statistics:', error);
     });
@@ -211,5 +213,9 @@ onMounted(() => {
             <h1>{{ t('NoStatistics') }}</h1>
         </div>
 
+        <div v-if="noGlobalStatistics" class="text-red-500 text-2xl font-bold mt-8">
+            <h1>{{ t('NoGlobalStatistics') }}</h1>
+        </div>
+        
     </div>
 </template>

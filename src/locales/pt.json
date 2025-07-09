@@ -160,6 +160,7 @@
   "StatusRatioTotal": "Total",
   "UniquePacients": "Pacientes Únicos",
   "NoStatistics": "Nenhuma estatística disponível",
+  "NoGlobalStatistics": "Nenhuma estatística global disponível",
 
   "FailedToGetUsers": "Erro ao obter utilizadores.",
   "UserRoleChangedSuccessfully": "Função do utilizador alterada com sucesso",
