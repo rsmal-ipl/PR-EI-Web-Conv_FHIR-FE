@@ -37,7 +37,7 @@ export const useConvertStore = defineStore('convert', () => {
         { value: 'DiagnosticReport', label: 'DiagnosticReport' },
         { value: 'Encounter', label: 'Encounter' },
         { value: 'Bundle', label: 'Bundle' },
-    ] 
+    ]
     const options = [
         { value: 'JSON', label: 'JSON' },
         // { value: 'XML', label: 'XML'}
@@ -167,26 +167,39 @@ export const useConvertStore = defineStore('convert', () => {
                 Resource: selectedResource.value.label,
                 OutputFormat: selectedOutputFormat.value
             })
-            toast({
-                title: t('ConversionSuccessful'),
-                description: t('ConversionSuccessMessage'),
-            })
 
-            jsonText.value = null
-            selectedJSONSchema.value = null
-            selectedFHIRVersion.value = null
-            selectedResource.value = null
-            selectedOutputFormat.value = null
+            const { id, isSuccess } = response.data;
 
-            router.push({ name: 'Conversion', params: { id: response.data } })
+            if (isSuccess) {
+                toast({
+                    title: t('ConversionSuccessful'),
+                    description: t('ConversionSuccessMessage'),
+                });
+
+                jsonText.value = null;
+                selectedJSONSchema.value = null;
+                selectedFHIRVersion.value = null;
+                selectedResource.value = null;
+                selectedOutputFormat.value = null;
+
+            } else {
+                toast({
+                    title: t('Error'),
+                    description: t('ConversionFailed'),
+                    variant: 'destructive',
+                });
+            }
+
+            router.push({ name: 'Conversion', params: { id: id } });
+
             return;
         } catch (e) {
-            storeError.setErrorMessages(e.response?.data, e.response?.data.errors, e.response?.status, 'Conversion Error')
+            storeError.setErrorMessages(e.response?.data, e.response?.data.errors, e.response?.status, 'Conversion Error');
             toast({
                 title: t('Error'),
                 description: t('ConversionFailed'),
                 variant: 'destructive',
-            })
+            });
             return false;
         }
     }

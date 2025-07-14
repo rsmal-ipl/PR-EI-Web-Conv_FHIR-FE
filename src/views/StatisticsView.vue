@@ -38,35 +38,31 @@ const examsPerPatientData = computed(() => {
             q3: epp.q3,
             max: epp.max,
             mean: meanVal,
-        },
-        {
-            label: "Q:" + 3 + "-" + 9 + "     Median:" + epp.median,
-            min: 1,
-            q1: 3,
-            median: 6,
-            q3: 9,
-            max: 12,
-            mean: 5,
-        },
-        {
-            label: "Q:" + 4 + "-" + 10 + "     Median:" + epp.median,
-            min: 2,
-            q1: 4,
-            median: 8,
-            q3: 10,
-            max: 14,
-            mean: 6,
-        },
-        {
-            label: "Q:" + 7 + "-" + 12 + "     Median:" + epp.median,
-            min: 2,
-            q1: 7,
-            median: 11,
-            q3: 12,
-            max: 17,
-            mean: 5,
-        },
+        }
     ]
+})
+
+const generateColors = (length) => {
+    const baseColors = [
+        '#3B82F6', '#0EA5E9', '#06B6D4', '#14B8A6',
+        '#10B981', '#6366F1', '#8B5CF6', '#7DD3FC',
+        '#5EEAD4', '#60A5FA'
+    ]
+
+    return Array.from({ length }, (_, i) => baseColors[i % baseColors.length])
+}
+
+const ageClassFrequency = computed(() => {
+    const raw = globalStatistics.value?.ages?.frequency || {}
+    const grouped = {}
+
+    Object.entries(raw).forEach(([ageStr, count]) => {
+        const age = parseInt(ageStr)
+        const group = `${Math.floor(age / 10) * 10}–${Math.floor(age / 10) * 10 + 9}`
+        grouped[group] = (grouped[group] || 0) + count
+    })
+
+    return grouped
 })
 
 onMounted(() => {
@@ -106,14 +102,16 @@ onMounted(() => {
         <div v-if="statistics?.totalConversions != 0" class="w-full p-4 rounded">
 
 
-            <h1 v-if="statistics?.charts" class="text-lg font-bold mt-4 text-center dark:text-white">{{ t('ConversionsLast30Days') }}</h1>
+            <h1 v-if="statistics?.charts" class="text-lg font-bold mt-4 text-center dark:text-white">{{
+                t('ConversionsLast30Days') }}</h1>
 
             <BarChart v-if="statistics?.charts" :labels="statistics.charts.conversionsPerDay.labels"
                 :values="statistics.charts.conversionsPerDay.values"
                 :colors="barColors.slice(0, statistics.charts.conversionsPerDay.labels.length)" :maxWidth="'700px'"
                 :height="'300px'" :chartTitle="t('TotalConversions')" />
-                
-            <h1 v-if="statistics?.charts" class="text-lg font-bold text-center mt-5 dark:text-white">{{ t('ResourceDistribution') }}</h1>
+
+            <h1 v-if="statistics?.charts" class="text-lg font-bold text-center mt-5 dark:text-white">{{
+                t('ResourceDistribution') }}</h1>
             <BarChart v-if="statistics?.charts" :labels="statistics.charts.resourceDistribution.labels"
                 :values="statistics.charts.resourceDistribution.values"
                 :colors="pieResourceColors.slice(0, statistics.charts.resourceDistribution.labels.length)"
@@ -142,17 +140,16 @@ onMounted(() => {
                         <h1 class="text-lg font-bold text-center dark:text-white">{{ t('ConversionsByUser') }}</h1>
                         <BarChart v-if="statistics?.charts" :labels="statistics.charts.conversionsByUser.labels"
                             :values="statistics.charts.conversionsByUser.values"
-                            :colors="userBarColors.slice(0, statistics.charts.conversionsByUser.labels.length)"
+                            :colors="['#4F46E5']"
                             :maxWidth="'700px'" :height="'300px'" :chartTitle="t('TotalConversions')" />
                     </div>
                 </div>
 
                 <div class="mt-12 w-full max-w-4xl" v-if="globalStatistics?.ages?.frequency">
                     <h1 class="text-lg font-bold text-center dark:text-white">{{ t('AgeFrequency') }}</h1>
-                    <BarChart :labels="Object.keys(globalStatistics.ages.frequency)"
-                        :values="Object.values(globalStatistics.ages.frequency)"
-                        :colors="barColors.slice(0, Object.keys(globalStatistics.ages.frequency).length)"
-                        :maxWidth="'700px'" :height="'350px'" :chartTitle="t('AgeFrequency')" />
+                    <BarChart :labels="Object.keys(ageClassFrequency)" :values="Object.values(ageClassFrequency)"
+                        :colors="barColors.slice(0, Object.keys(ageClassFrequency).length)" :maxWidth="'700px'"
+                        :height="'350px'" :chartTitle="t('AgeFrequency')" />
                 </div>
             </div>
 
@@ -160,15 +157,15 @@ onMounted(() => {
                 <h1 class="text-lg font-bold text-center dark:text-white">{{ t('ExamType') }}</h1>
                 <PieChart :labels="Object.keys(globalStatistics.exams.counts)"
                     :values="Object.values(globalStatistics.exams.counts)"
-                    :colors="pieResourceColors.slice(0, Object.keys(globalStatistics.exams.counts).length)"
-                    :maxWidth="'600px'" :height="'350px'" :chartTitle="t('ExamType')" />
+                    :colors="generateColors(Object.keys(globalStatistics.exams.counts).length)" :maxWidth="'600px'"
+                    :height="'350px'" :chartTitle="t('ExamType')" />
             </div>
 
             <div class="mt-12 w-full max-w-4xl mx-auto" v-if="globalStatistics?.exams_by_date?.counts">
                 <h1 class="text-lg font-bold text-center dark:text-white">{{ t('DateFrequency') }}</h1>
                 <BarChart :labels="Object.keys(globalStatistics.exams_by_date.counts)"
                     :values="Object.values(globalStatistics.exams_by_date.counts)"
-                    :colors="barColors.slice(0, Object.keys(globalStatistics.exams_by_date.counts).length)"
+                    :colors="['#EF4444']"
                     :maxWidth="'700px'" :height="'350px'" :chartTitle="t('DateFrequency')" />
             </div>
 
@@ -216,6 +213,6 @@ onMounted(() => {
         <div v-if="noGlobalStatistics" class="text-red-500 text-2xl font-bold mt-8">
             <h1>{{ t('NoGlobalStatistics') }}</h1>
         </div>
-        
+
     </div>
 </template>

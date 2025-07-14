@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { Input } from '@/components/ui/input'
 import Button from '@/components/ui/button/Button.vue'
@@ -18,53 +18,114 @@ const storeAuth = useAuthStore()
 const storeError = useErrorStore()
 
 const credentials = ref({
-    email: '',
-    password: '',
-    recaptchaResponse: ''
+  email: '',
+  password: '',
+  recaptchaResponse: ''
 })
 
-const siteKey = '6LcevBArAAAAALx_2825UtGmnR66lc6n43rC6ctu'
+const siteKey = "6LcevBArAAAAALx_2825UtGmnR66lc6n43rC6ctu"
+const widgetId = ref(null)
+let recaptchaInitialized = false
 
 const cancel = () => {
-    router.push({ name: 'home' })
+  router.push({ name: 'home' })
 }
 
 const login = () => {
-
-    const token = grecaptcha.getResponse()
-    if (!token) {
-        toast({
-            title: t('recaptcha_error_title'),
-            description: t('recaptcha_error_message'),
-            variant: 'destructive'
-        })
-        return
-    }
-    credentials.value.recaptchaResponse = token
-    storeAuth.login(credentials.value)
+  if (!window.grecaptcha || widgetId.value === null) {
+    toast({
+      title: t('recaptcha_error_title'),
+      description: t('recaptcha_not_loaded_message'),
+      variant: 'destructive'
+    })
+    return
+  }
+  const token = grecaptcha.getResponse(widgetId.value)
+  if (!token) {
+    toast({
+      title: t('recaptcha_error_title'),
+      description: t('recaptcha_error_message'),
+      variant: 'destructive'
+    })
+    grecaptcha.reset(widgetId.value)
+    return
+  }
+  credentials.value.recaptchaResponse = token
+  storeAuth.login(credentials.value)
+    .catch(() => {
+      grecaptcha.reset(widgetId.value)
+    })
 }
 
-onMounted(() => {
-    storeError.resetMessages()
+function loadReCaptchaScript() {
+  return new Promise((resolve, reject) => {
     if (window.grecaptcha) {
-        grecaptcha.ready(() => {
-            grecaptcha.render('recaptcha-container', {
-                sitekey: siteKey
-            })
-        })
+      return resolve(window.grecaptcha)
     }
+    const script = document.createElement('script')
+    script.src = 'https://www.google.com/recaptcha/api.js?render=explicit'
+    script.async = true
+    script.defer = true
+    script.onload = () => resolve(window.grecaptcha)
+    script.onerror = reject
+    document.head.appendChild(script)
+  })
+}
+
+onMounted(async () => {
+  storeError.resetMessages()
+  try {
+    const grecaptcha = await loadReCaptchaScript()
+    grecaptcha.ready(() => {
+      // Só renderiza se ainda não foi inicializado e o container existe
+      if (!recaptchaInitialized && document.getElementById('recaptcha-container')) {
+        recaptchaInitialized = true
+        widgetId.value = grecaptcha.render('recaptcha-container', {
+          sitekey: siteKey,
+          callback: (response) => {
+            credentials.value.recaptchaResponse = response
+          },
+          'expired-callback': () => {
+            credentials.value.recaptchaResponse = ''
+            grecaptcha.reset(widgetId.value)
+            toast({
+              title: t('recaptcha_expired_title'),
+              description: t('recaptcha_expired_message'),
+              variant: 'destructive'
+            })
+          }
+        })
+      }
+    })
+  } catch (error) {
+    console.error('Erro ao carregar o reCAPTCHA:', error)
+    toast({
+      title: t('recaptcha_error_title'),
+      description: t('recaptcha_not_loaded_message'),
+      variant: 'destructive'
+    })
+  }
+})
+
+// Limpa o recaptcha ao desmontar o componente (opcional, mas recomendado)
+onBeforeUnmount(() => {
+  if (window.grecaptcha && widgetId.value !== null) {
+    window.grecaptcha.reset(widgetId.value)
+    recaptchaInitialized = false
+    widgetId.value = null
+  }
 })
 
 const callback = (response) => {
-    if (response.credential) {
-        storeAuth.loginWithGoogle(response)
-    } else {
-        toast({
-            title: t('google_login_error_title'),
-            description: t('google_login_error_message'),
-            variant: 'destructive'
-        })
-    }
+  if (response.credential) {
+    storeAuth.loginWithGoogle(response)
+  } else {
+    toast({
+      title: t('google_login_error_title'),
+      description: t('google_login_error_message'),
+      variant: 'destructive'
+    })
+  }
 }
 </script>
 
@@ -115,6 +176,7 @@ const callback = (response) => {
             </form>
         </div>
     </div>
+    
 </template>
 
 <style scoped>
