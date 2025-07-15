@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { ref, watch, computed } from 'vue'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -18,20 +18,13 @@ import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
-interface Option {
-  label: string
-  value: string
-}
+const props = defineProps({
+  modelValue: Object,
+  items: Array,
+  placeholder: String
+})
 
-const props = defineProps<{
-  modelValue: Option | undefined
-  items: Option[]
-  placeholder?: string
-}>()
-
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: Option | undefined): void
-}>()
+const emit = defineEmits(['update:modelValue'])
 
 const selected = ref(props.modelValue)
 
@@ -47,10 +40,10 @@ const placeholderText = computed(() => props.placeholder ?? 'Select an option')
 </script>
 
 <template>
- <Combobox v-model="selected" by="label">
+  <Combobox v-model="selected" by="label">
     <ComboboxAnchor as-child>
       <ComboboxTrigger as-child>
-        <Button variant="default" class="justify-between w-full bg-white text-black hover:bg-white hover:text-black dark:hover:bg-white">
+        <Button variant="default" class="justify-between w-full bg-white text-black hover:bg-white hover:text-black dark:hover:bg-white" data-testid="combobox-resource">
           {{ selected?.label ?? placeholderText }}
           <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -75,6 +68,7 @@ const placeholderText = computed(() => props.placeholder ?? 'Select an option')
           v-for="item in items"
           :key="item.value"
           :value="item"
+          :data-testid="`combobox-resource-option-${item.value}`"
         >
           {{ item.label }}
           <ComboboxItemIndicator>
