@@ -77,7 +77,6 @@ onMounted(async () => {
   try {
     const grecaptcha = await loadReCaptchaScript()
     grecaptcha.ready(() => {
-      // Só renderiza se ainda não foi inicializado e o container existe
       if (!recaptchaInitialized && document.getElementById('recaptcha-container')) {
         recaptchaInitialized = true
         widgetId.value = grecaptcha.render('recaptcha-container', {
@@ -107,7 +106,6 @@ onMounted(async () => {
   }
 })
 
-// Limpa o recaptcha ao desmontar o componente (opcional, mas recomendado)
 onBeforeUnmount(() => {
   if (window.grecaptcha && widgetId.value !== null) {
     window.grecaptcha.reset(widgetId.value)

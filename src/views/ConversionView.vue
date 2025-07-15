@@ -193,7 +193,7 @@ onMounted(() => {
 
     <div class="flex flex-wrap sm:flex-nowrap justify-center gap-2 mt-5 sm:mb-0 max-w-sm w-full">
       <Button @click="previewInput" class="w-full mx-auto">{{ t('PreviewInput') }}</Button>
-      <Button @click="previewOutput" class="w-full mx-auto">{{ t('PreviewOutput') }}</Button>
+      <Button @click="previewOutput" class="w-full mx-auto" :disabled="!conversion?.convertedContent">{{ t('PreviewOutput') }}</Button>
     </div>
 
     <h1 class="mt-5 font-bold" v-if="conversion?.message" :class="{ 'text-red-500': conversion?.isSuccess == false }">{{ conversion?.message }}</h1>
@@ -243,7 +243,7 @@ onMounted(() => {
         v-if="storeAuth.user?.roles?.includes('Owner') || storeAuth.user?.roles?.includes('Admin')">
         Delete Conversion
       </Button>
-      <Button v-if="storeAuth.user?.roles?.includes('Owner') || storeAuth.user?.roles?.includes('Admin')" @click="edit()" class="w-full mx-auto" :disabled="!conversion?.originalContent">{{ t('EditOutput') }}</Button>
+      <Button v-if="storeAuth.user?.roles?.includes('Owner') || storeAuth.user?.roles?.includes('Admin')" @click="edit()" class="w-full mx-auto" :disabled="!conversion?.convertedContent">{{ t('EditOutput') }}</Button>
     </div>
 
     <Button @click="router.push({ name: 'History' })" class="w-fit mx-auto mt-5">Return</Button>

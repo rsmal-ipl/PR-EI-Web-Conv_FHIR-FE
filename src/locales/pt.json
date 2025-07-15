@@ -7,6 +7,8 @@
   "Hello": "Olá",
   "Cancel": "Cancelar",
   "Error": "Erro",
+  "Email": "Email",
+
 
   "title": "Converter JSON para o formato FHIR",
   "contextTitle": "Contexto",
@@ -84,6 +86,11 @@
   "Next": "Seguinte",
   "NoJsonSchemaSelected": "Nenhum esquema JSON selecionado",
   "PleaseSelectJsonSchema": "Por favor, selecione um esquema JSON para continuar",
+  "SaveChangesFirst": "Guarde as alterações primeiro",
+  "PleaseSaveOrCancelChanges": "Por favor, guarde ou cancele as alterações",
+  "FileTooLarge": "Ficheiro demasiado grande",
+  "FileTooLargeMessage": "O ficheiro excede o tamanho máximo permitido de 5Mb.",
+
 
   "ForgotPassword": "Esqueceu-se da palavra-passe",
   "NewPassword": "Nova palavra-passe",

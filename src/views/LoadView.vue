@@ -28,35 +28,86 @@ const inputFile = ref(null)
 const isEditing = ref(false)
 const copyInputContent = ref('')
 
+const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10 MB
+
 
 const handleFileUpload = (event) => {
   const file = event.target.files[0]
-  if (file) {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      jsonText.value = e.target.result
+  if (!file) return
+
+  if (file.size > MAX_FILE_SIZE) {
+    toast({
+      title: t('FileTooLarge'),
+      description: t('FileTooLargeMessage', { size: '1MB' }),
+      variant: 'destructive'
+    })
+
+    jsonText.value = ''
+    showModal.value = false
+
+    if (inputFile.value?.inputRef) {
+      inputFile.value.inputRef.value = ''
     }
-    reader.readAsText(file)
+    return
   }
+
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    validateAndSetJson(e.target.result)
+  }
+  reader.readAsText(file)
 }
 
 const handleDrop = (event) => {
   isDragging.value = false
   const file = event.dataTransfer.files[0]
-  if (file && file.type === "application/json") {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      jsonText.value = e.target.result
-    }
-    reader.readAsText(file)
-  } else {
+  if (!file) return
+
+  if (file.type !== "application/json") {
     toast({
       title: t('InvalidFileType'),
       description: t('InvalidFileTypeMessage'),
       variant: 'destructive'
     })
+    return
+  }
+
+  if (file.size > MAX_FILE_SIZE) {
+    toast({
+      title: t('FileTooLarge'),
+      description: t('FileTooLargeMessage'),
+      variant: 'destructive'
+    })
+    jsonText.value = ''
+    showModal.value = false
+
+    if (inputFile.value?.inputRef) {
+      inputFile.value.inputRef.value = ''
+    }
+    return
+  }
+
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    validateAndSetJson(e.target.result)
+  }
+  reader.readAsText(file)
+}
+
+
+const validateAndSetJson = (text) => {
+  try {
+    const parsed = JSON.parse(text)
+    jsonText.value = JSON.stringify(parsed, null, 2)
+  } catch (e) {
+    toast({
+      title: t('InvalidJsonFormat'),
+      description: t('InvalidJsonFormatMessage'),
+      variant: 'destructive'
+    })
   }
 }
+
 
 const removeFile = () => {
   jsonText.value = ''
@@ -92,6 +143,16 @@ const previewJson = () => {
 }
 
 const next = () => {
+
+  if (isEditing.value) {
+    toast({
+      title: t('SaveChangesFirst'),
+      description: t('PleaseSaveOrCancelChanges'),
+      variant: 'destructive'
+    })
+    return
+  }
+
   if (!jsonText.value) {
     toast({
       title: t('NoJsonLoad'),
@@ -101,7 +162,7 @@ const next = () => {
     return
   }
 
-  if(storeConvert.selectedJSONSchema == null) {
+  if (storeConvert.selectedJSONSchema == null) {
     toast({
       title: t('NoJsonSchemaSelected'),
       description: t('PleaseSelectJsonSchema'),

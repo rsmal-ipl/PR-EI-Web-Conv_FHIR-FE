@@ -1,6 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router'
-import { onMounted, ref } from 'vue'
+import { onMounted, onBeforeUnmount, ref } from 'vue'
 import { Input } from '@/components/ui/input'
 import Button from '@/components/ui/button/Button.vue'
 import { useErrorStore } from '@/stores/error'
@@ -8,6 +8,7 @@ import { useAuthStore } from '@/stores/auth'
 import ErrorMessage from '@/components//common/ErrorMessage.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import { useI18n } from 'vue-i18n'
+import { toast } from '@/components/ui/toast'
 
 const { t } = useI18n()
 
@@ -16,22 +17,105 @@ const storeAuth = useAuthStore()
 const storeError = useErrorStore()
 
 const credentials = ref({
-    email: '',
-    name: '',
-    password: '',
-    passwordConfirm: '',
+  email: '',
+  name: '',
+  password: '',
+  passwordConfirm: '',
+  recaptchaResponse: ''
 })
+
+const siteKey = "6LcevBArAAAAALx_2825UtGmnR66lc6n43rC6ctu"
+const widgetId = ref(null)
+let recaptchaInitialized = false
 
 const cancel = () => {
   router.push({ name: 'home' })
 }
 
 const register = () => {
-   storeAuth.register(credentials.value)
+  if (!window.grecaptcha || widgetId.value === null) {
+    toast({
+      title: t('recaptcha_error_title'),
+      description: t('recaptcha_not_loaded_message'),
+      variant: 'destructive'
+    })
+    return
+  }
+
+  const token = grecaptcha.getResponse(widgetId.value)
+  if (!token) {
+    toast({
+      title: t('recaptcha_error_title'),
+      description: t('recaptcha_error_message'),
+      variant: 'destructive'
+    })
+    grecaptcha.reset(widgetId.value)
+    return
+  }
+
+  credentials.value.recaptchaResponse = token
+
+  storeAuth.register(credentials.value)
+    .catch(() => {
+      grecaptcha.reset(widgetId.value)
+    })
 }
 
-onMounted(() => {
-   storeError.resetMessages()
+function loadReCaptchaScript() {
+  return new Promise((resolve, reject) => {
+    if (window.grecaptcha) {
+      return resolve(window.grecaptcha)
+    }
+    const script = document.createElement('script')
+    script.src = 'https://www.google.com/recaptcha/api.js?render=explicit'
+    script.async = true
+    script.defer = true
+    script.onload = () => resolve(window.grecaptcha)
+    script.onerror = reject
+    document.head.appendChild(script)
+  })
+}
+
+onMounted(async () => {
+  storeError.resetMessages()
+  try {
+    const grecaptcha = await loadReCaptchaScript()
+    grecaptcha.ready(() => {
+      if (!recaptchaInitialized && document.getElementById('recaptcha-register')) {
+        recaptchaInitialized = true
+        widgetId.value = grecaptcha.render('recaptcha-register', {
+          sitekey: siteKey,
+          callback: (response) => {
+            credentials.value.recaptchaResponse = response
+          },
+          'expired-callback': () => {
+            credentials.value.recaptchaResponse = ''
+            grecaptcha.reset(widgetId.value)
+            toast({
+              title: t('recaptcha_expired_title'),
+              description: t('recaptcha_expired_message'),
+              variant: 'destructive'
+            })
+          }
+        })
+      }
+    })
+  } catch (error) {
+    console.error('Erro ao carregar o reCAPTCHA:', error)
+    toast({
+      title: t('recaptcha_error_title'),
+      description: t('recaptcha_not_loaded_message'),
+      variant: 'destructive'
+    })
+  }
+})
+
+onBeforeUnmount(() => {
+  if (window.grecaptcha && widgetId.value !== null) {
+    window.grecaptcha.reset(widgetId.value)
+    recaptchaInitialized = false
+    widgetId.value = null
+  }
 })
 </script>
 
@@ -73,6 +157,9 @@ onMounted(() => {
                         <ErrorMessage :errorMessage="storeError.fieldMessage('ConfirmPassword')"></ErrorMessage>
                     </div>
                 </div>
+                <div class="w-fit mx-auto mt-2">
+                    <div id="recaptcha-register" class="g-recaptcha"></div>
+                </div>
                 <div>
                     <Button type="submit" class="w-full mb-3">{{ t('Register') }}</Button>
                     <Button class="w-full dark:text-white dark:bg-gray-800 dark:border-gray-400" variant="outline" @click="cancel">{{ t('Cancel') }}</Button>
@@ -84,3 +171,11 @@ onMounted(() => {
         </div>
     </div>
 </template>
+
+<style scoped>
+@media only screen and (max-width: 500px) {
+  .g-recaptcha {
+    transform: scale(0.77);
+  }
+}
+</style>
