@@ -32,7 +32,7 @@ const cancel = () => {
   router.push({ name: 'home' })
 }
 
-const register = () => {
+const register = async () => {
   if (!window.grecaptcha || widgetId.value === null) {
     toast({
       title: t('recaptcha_error_title'),
@@ -55,10 +55,13 @@ const register = () => {
 
   credentials.value.recaptchaResponse = token
 
-  storeAuth.register(credentials.value)
-    .catch(() => {
-      grecaptcha.reset(widgetId.value)
-    })
+  try {
+    await storeAuth.register(credentials.value)
+  } catch (error) {
+  } finally {
+    grecaptcha.reset(widgetId.value)
+    credentials.value.recaptchaResponse = ''
+  }
 }
 
 function loadReCaptchaScript() {
